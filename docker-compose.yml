@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  defiscan:
+    container_name: defiscan
+    build: ./
+    volumes:
+      - ./src:/app
+    tty: true
+    stdin_open: true
+    command: /bin/sh
