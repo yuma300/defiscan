@@ -6,6 +6,5 @@ services:
     build: ./
     volumes:
       - ./src:/app
+    command: /bin/bash
     tty: true
-    stdin_open: true
-    command: /bin/sh

@@ -17,5 +17,7 @@ $ docker-compose down
 ### kavascan
 in the container
 
+```
 # cd app
 # python kavascan.py your_kava_address  (ex. # python kavascan.py kava12dyshua9nkvx9w8ywp72wdnzrc4t4mnnycz0dl
+```
