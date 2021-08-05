@@ -18,6 +18,19 @@ $ docker-compose down
 in the container
 
 ```
-# cd app
+# cd app/kava
 # python kavascan.py your_kava_address  (ex. # python kavascan.py kava12dyshua9nkvx9w8ywp72wdnzrc4t4mnnycz0dl
 ```
+
+
+### kava for cryptact customefile
+
+in the container
+
+```
+# cd app/kava
+# python kava_cryptact.py your_kava_address  (ex. # python kavascan.py kava12dyshua9nkvx9w8ywp72wdnzrc4t4mnnycz0dl
+# cat kava_cryptact.csv 
+```
+
+
