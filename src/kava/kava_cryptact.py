@@ -62,80 +62,71 @@ def main():
         logs = transaction['data']['logs']
         for log in logs:
           events = log['events']
-          results = results + classify(timestamp, events, fee, txhash)
+          results = results + classify(timestamp, events, fee, txhash, address)
       else:
         print(json.dumps(transaction['data']['raw_log']))
 
   df = pd.DataFrame(results)
+  df = df.sort_values('Timestamp')
   print(df)
   df.to_csv('kava_cryptact.csv', index=False, columns=['Timestamp', 'Action', 'Source', 'Base', 'Volume', 'Price', 'Counter', 'Fee', 'FeeCcy', 'Comment'])
 
 
-def classify(timestamp, events, fee, txhash):
+def classify(timestamp, events, fee, txhash, address):
   results = []
   #print(json.dumps(events, indent=2))
   message = list(filter(lambda item: item['type'] == 'message', events))[0]
   action = list(filter(lambda item: item['key'] == 'action', message['attributes']))[0]['value']
   #print(events)
-  print(action)
   if action == 'create_cdp':
     transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
     amount = list(filter(lambda item: item['key'] == 'amount' and 'usdx' in item['value'], transfer['attributes']))[0]['value']
     amount = Decimal(amount.replace('usdx', '')) / Decimal('1000000')
     results.append({'Action': 'BORROW', 'Base': 'USDX', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'cdp create'})
-    print(results)
   elif action == 'draw_cdp':
     transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
     amount = list(filter(lambda item: item['key'] == 'amount', transfer['attributes']))[0]['value']
     amount = Decimal(amount.replace('usdx', '')) / Decimal('1000000')
     results.append({'Action': 'BORROW', 'Base': 'USDX', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'cdp draw debt'})
-    print(results)
   elif action == 'deposit_cdp':
     if fee == 0: return results 
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'deposit cdp'})
-    print(results)
   elif action == 'repay_cdp':
     transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
     amount = list(filter(lambda item: item['key'] == 'amount', transfer['attributes']))[0]['value']
     amount = Decimal(amount.replace('usdx', '')) / Decimal('1000000')
     results.append({'Action': 'RETURN', 'Base': 'USDX', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'cdp repay debt'})
-    print(results)
   elif action == 'withdraw_cdp':
     if fee == 0: return results 
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'withdraw cdp'})
-    print(results)
   elif action == 'claimAtomicSwap':
     if fee == 0: return results 
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'atomic swap fee'})
-    print(action)
   elif action in ['claim_hard_reward', 'claim_harvest_reward']:
     transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
     amount = list(filter(lambda item: item['key'] == 'amount', transfer['attributes']))[0]['value']
-    print(amount)
     hard_amount = list(filter(lambda item: 'hard' in item, amount.split(',')))[0]
     hard_amount = Decimal(hard_amount.replace('hard', '')) / Decimal('1000000')
-    print(hard_amount)
     results.append({'Action': 'LENDING', 'Base': 'HARD', 'Volume': hard_amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim HARD of hard lending reward'})
 
     try:
       kava_amount = list(filter(lambda item: 'ukava' in item, amount.split(',')))[0]
       kava_amount = Decimal(kava_amount.replace('ukava', '')) / Decimal('1000000')
-      print(kava_amount)
       results.append({'Action': 'LENDING', 'Base': 'KAVA', 'Volume': kava_amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim KAVA of hard lending reward'})
     except IndexError as e:
       print('no KAVA reward on hard')
 
-    print(results)
   elif action in ['claim_usdx_minting_reward', 'claim_reward']:
     transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
     amount = list(filter(lambda item: item['key'] == 'amount', transfer['attributes']))[0]['value']
     amount = Decimal(amount.replace('ukava', '')) / Decimal('1000000')
     results.append({'Action': 'LENDING', 'Base': 'KAVA', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim kava usdx minting reward'})
-    print(results)
   elif action == 'createAtomicSwap':
     if fee == 0: return results 
+    message_attributes = list(filter(lambda item: item['type'] == 'message', events))[0]['attributes']
+    sender = list(filter(lambda item: item['key'] == 'sender', message_attributes))[0]['value']
+    if sender != address: return results 
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'atomic swap fee'})
-    print(results)
   elif action in ['delegate','withdraw_delegator_reward']:
     try:
       transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
@@ -143,25 +134,20 @@ def classify(timestamp, events, fee, txhash):
       amount = list(filter(lambda item: 'ukava' in item, amount.split(',')))[0]
       amount = Decimal(amount.replace('ukava', '')) / Decimal('1000000')
       results.append({'Action': 'STAKING', 'Base': 'KAVA', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim staking reward'})
-      print(results)
     except IndexError as e:
       print('this time. no auto claim reward.')
   elif action in ['hard_deposit', 'harvest_deposit']:
     if fee == 0: return results 
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'hard deposit'})
-    print(results)
   elif action in ['hard_withdraw', 'harvest_withdraw']:
     if fee == 0: return results 
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'hard withdraw'})
-    print(results)
   elif action == 'refundAtomicSwap':
     if fee == 0: return results 
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'refund atomic swap'})
-    print(action)
   elif action == 'send':
     if fee == 0: return results 
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'send'})
-    print(results)
   elif action == 'begin_unbonding':
     try:
       transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
@@ -169,17 +155,16 @@ def classify(timestamp, events, fee, txhash):
       amount = list(filter(lambda item: 'ukava' in item, amount.split(',')))[0]
       amount = Decimal(amount.replace('ukava', '')) / Decimal('1000000')
       results.append({'Action': 'STAKING', 'Base': 'KAVA', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim staking reward'})
-      print(results)
     except IndexError as e:
       print('this time. no auto claim reward.')
   elif action == 'vote':
     if fee == 0: return results 
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'vote'})
-    print(results)
   else:
     raise ValueError('%s: this is undefined action ...' % action)
 
   results = list(map(lambda item: item|{'Timestamp': timestamp, 'Source': 'kava', 'Comment': item['Comment'] + ' https://www.mintscan.io/kava/txs/%s' % txhash}, results))
+  print(results)
   return results
 
 
