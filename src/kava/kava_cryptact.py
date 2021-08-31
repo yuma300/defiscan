@@ -37,7 +37,13 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
   txhash = transaction['data']['txhash']
   if action == 'cdp/MsgCreateCDP':
     collateral_token = tx_msg['value']['collateral_type']
-    collateral_amount = Decimal(tx_msg['value']['collateral']['amount']) / Decimal('1000000')
+    cdp_list = list(filter(lambda item: item['collateral_token'] == collateral_token, cdp_trucker))
+    if len(cdp_list) > 0: # check same collateral cdp already exist. if true, it means liquidation was executed.
+      cdp = cdp_list[0]
+      results.append({'Timestamp': timestamp, 'Source': 'kava', 'Action': 'RETURN', 'Base': 'USDX', 'Volume': cdp['debt_amount'], 'Price': 110, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'cdp liquidated https://www.mintscan.io/kava/txs/%s' % txhash})
+      cdp_trucker.remove(cdp)
+      
+    collateral_amount = Decimal(tx_msg['value']['collateral']['amount']) / Decimal('100000000')
     debt_amount = Decimal(tx_msg['value']['principal']['amount'])/ Decimal('1000000')
     cdp = {'collateral_token': collateral_token, 'collateral_amount': collateral_amount, 'debt_amount': debt_amount}
     cdp_trucker.append(cdp)
@@ -61,11 +67,11 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
       cdp = list(filter(lambda item: item['collateral_token'] == collateral_token, cdp_trucker))[0]
       if len(list(filter(lambda item: item['type'] == 'cdp_close', events))) != 0: # check wether close or not
         if cdp['debt_amount'] - repay_amount > 0: # check total debt amount is not bigger than total repayamount
-          raise ValueError('%s: total debt amount is bigger than total repayment.' % collateral_token)
+          raise ValueError('%s: total debt amount (%s) is bigger than total repayment (%s).' % (collateral_token, cdp['debt_amount'], repay_amount))
         interest_amount = repay_amount - cdp['debt_amount'] # calcurate interest amount
         transfer_attributes = list(filter(lambda item: item['type'] == 'transfer', events))[0]['attributes']
         withdraw_amount = list(filter(lambda item: item['key'] == 'amount' and 'usdx' not in item['value'], transfer_attributes))[0]['value']
-        withdraw_amount = Decimal(re.sub(r"\D", "", withdraw_amount))/ Decimal('1000000')
+        withdraw_amount = Decimal(re.sub(r"\D", "", withdraw_amount))/ Decimal('100000000')
 
         if cdp['collateral_amount'] != withdraw_amount: # check withdraw amount is equal to collateral_amount
           raise ValueError('%s: collateral_amount is not equal to withdraw amount (%s)' % collateral_token, cdp['collateral_amount'], withdraw_amount)
@@ -83,7 +89,7 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
       raise e
   elif action == 'cdp/MsgWithdraw':
     collateral_token = tx_msg['value']['collateral_type']
-    collateral_amount = Decimal(tx_msg['value']['collateral']['amount'])/ Decimal('1000000')
+    collateral_amount = Decimal(tx_msg['value']['collateral']['amount'])/ Decimal('100000000')
     try:
       cdp = list(filter(lambda item: item['collateral_token'] == collateral_token, cdp_trucker))[0]
       if cdp['collateral_amount'] - Decimal(collateral_amount) < 0: # check total withdraw amount is not bigger than collateral
@@ -97,7 +103,7 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
     results.append({'Timestamp': timestamp, 'Source': 'kava', 'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'deposit cdp https://www.mintscan.io/kava/txs/%s' % txhash})
   elif action == 'cdp/MsgDeposit':
     collateral_token = tx_msg['value']['collateral_type']
-    collateral_amount = Decimal(tx_msg['value']['collateral']['amount'])/ Decimal('1000000')
+    collateral_amount = Decimal(tx_msg['value']['collateral']['amount'])/ Decimal('100000000')
     try:
       cdp = list(filter(lambda item: item['collateral_token'] == collateral_token, cdp_trucker))[0]
       cdp['collateral_amount'] += Decimal(collateral_amount)
