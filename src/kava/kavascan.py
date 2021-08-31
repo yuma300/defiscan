@@ -1,5 +1,6 @@
 import requests
 import time
+import json
 import sys
 
 
@@ -8,6 +9,7 @@ def main():
   #print(address)
   num_transactions = 50 
   last_id = 0
+  f = open('transactions.txt', 'w')
   while num_transactions >= 50:
     time.sleep(5)
     response = requests.get(
@@ -19,8 +21,9 @@ def main():
     for transaction in transactions:
       last_id = transaction['header']['id']
       #print(last_id)
-      print(transaction)
-
+      f.write(json.dumps(transaction)+"\n")
+      #print(transaction)
+  f.close()
 
 if __name__== '__main__':
     main()
