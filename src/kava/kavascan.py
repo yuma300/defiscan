@@ -2,21 +2,33 @@ import requests
 import time
 import json
 import sys
+import os
 
+def read_config():
+  f = open(".env.json","r")
+  env_dict = json.load(f)
+  return env_dict
 
-def main():
-  address = sys.argv[1]
-  #print(address)
-  num_transactions = 50 
+def get_wallet_address():
+  if "KAVA_WALLET_ADDRESS" in os.environ:
+    return os.environ["KAVA_WALLET_ADDRESS"].split(",")
+  elif os.path.exists(os.getcwd()+"/.env.json"):
+    return read_config()["address"]
+  else:
+    return sys.argv[1].split(",")
+
+def get_transactions(address):
+  num_transactions = 50
   last_id = 0
-  f = open('transactions.txt', 'w')
+  file_name = 'transactions_%s.txt' % address
+  f = open(file_name, 'w')
   while num_transactions >= 50:
     time.sleep(5)
     response = requests.get(
         'https://api-kava.cosmostation.io/v1/account/new_txs/%s' % address,
         params={'from': last_id, 'limit': 50})
     transactions = response.json()
-    num_transactions = len(transactions) 
+    num_transactions = len(transactions)
     #print(num_transactions)
     for transaction in transactions:
       last_id = transaction['header']['id']
@@ -24,6 +36,15 @@ def main():
       f.write(json.dumps(transaction)+"\n")
       #print(transaction)
   f.close()
+
+def main():
+  addresses = get_wallet_address()
+  print(addresses)
+  #print(address)
+  for address in addresses:
+    # print(address)
+    get_transactions(address)
+
 
 if __name__== '__main__':
     main()

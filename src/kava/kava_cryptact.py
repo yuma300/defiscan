@@ -18,7 +18,7 @@ import re
 # Create Atomic Swap         : createAtomicSwap
 # Create CDP                 : create_cdp
 # Delegate                   : delegate
-# Get Reward                 : withdraw_delegator_reward 
+# Get Reward                 : withdraw_delegator_reward
 # HARD Deposit               : hard_deposit
 # HARD Withdraw              : hard_withdraw
 # Harvest Claim Reward       : claim_harvest_reward
@@ -29,6 +29,20 @@ import re
 # Send                       : send
 # Undelegate                 : begin_unbonding
 # Vote                       : vote
+
+def read_config():
+  f = open(".env.json","r")
+  env_dict = json.load(f)
+  return env_dict
+
+def get_wallet_address():
+  if "KAVA_WALLET_ADDRESS" in os.environ:
+    return os.environ["KAVA_WALLET_ADDRESS"].split(",")
+  elif os.path.exists(os.getcwd()+"/.env.json"):
+    return read_config()["address"]
+  else:
+    return sys.argv[1].split(",")
+
 
 def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
   results = []
@@ -43,7 +57,7 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
       cdp = cdp_list[0]
       results.append({'Timestamp': timestamp, 'Source': 'kava', 'Action': 'RETURN', 'Base': 'USDX', 'Volume': cdp['debt_amount'], 'Price': 110, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'cdp liquidated https://www.mintscan.io/kava/txs/%s' % txhash})
       cdp_trucker.remove(cdp)
-      
+
     collateral_amount = Decimal(tx_msg['value']['collateral']['amount']) / Decimal('100000000')
     debt_amount = Decimal(tx_msg['value']['principal']['amount'])/ Decimal('1000000')
     cdp = {'collateral_token': collateral_token, 'collateral_amount': collateral_amount, 'debt_amount': debt_amount}
@@ -99,7 +113,7 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
       print('cdp/MsgWithdraw. CDP does not exist!!!!!!')
       raise e
 
-    if fee == 0: return results 
+    if fee == 0: return results
     results.append({'Timestamp': timestamp, 'Source': 'kava', 'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'deposit cdp https://www.mintscan.io/kava/txs/%s' % txhash})
   elif action == 'cdp/MsgDeposit':
     collateral_token = tx_msg['value']['collateral_type']
@@ -111,7 +125,7 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
       print('cdp/MsgDeposit. CDP does not exist!!!!!!')
       raise e
 
-    if fee == 0: return results 
+    if fee == 0: return results
     results.append({'Timestamp': timestamp, 'Source': 'kava', 'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'deposit cdp https://www.mintscan.io/kava/txs/%s' % txhash})
   elif action == 'swap/MsgSwapExactForTokens':
     input_token = tx_msg['value']['exact_token_a']['denom'].upper()
@@ -124,14 +138,13 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
   #print(cdp_trucker)
   return results
 
-      
 
-def main():
-  address = sys.argv[1]    
+def create_cryptact_csv(address):
   results = []
   transactions = []
   decoder = json.JSONDecoder()
-  with open('transactions.txt', 'r') as f:
+  read_file_name = 'transactions_%s.txt' % address
+  with open(read_file_name, 'r') as f:
     line = f.readline()
     while line:
       transactions.append(json.loads(line))
@@ -146,7 +159,7 @@ def main():
     print(json.dumps(transaction['header'], indent=2))
     #print(json.dumps(transaction, indent=2))
     chain_id = transaction['header']['chain_id']
-    timestamp = dt.strptime(transaction['header']['timestamp'], '%Y-%m-%dT%H:%M:%SZ') 
+    timestamp = dt.strptime(transaction['header']['timestamp'], '%Y-%m-%dT%H:%M:%SZ')
     txhash = transaction['data']['txhash']
     fee = 0
     try:
@@ -168,7 +181,8 @@ def main():
   df = pd.DataFrame(results)
   df = df.sort_values('Timestamp')
   #print(df)
-  df.to_csv('kava_cryptact.csv', index=False, columns=['Timestamp', 'Action', 'Source', 'Base', 'Volume', 'Price', 'Counter', 'Fee', 'FeeCcy', 'Comment'])
+  result_file_name = 'kava_cryptact_%s.csv' % address
+  df.to_csv(result_file_name, index=False, columns=['Timestamp', 'Action', 'Source', 'Base', 'Volume', 'Price', 'Counter', 'Fee', 'FeeCcy', 'Comment'])
 
 
 def classify(timestamp, events, fee, txhash, address, chain_id):
@@ -188,7 +202,7 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
   elif action == 'withdraw_cdp':
     print('withdraw_cdp')
   elif action == 'claimAtomicSwap':
-    if fee == 0: return results 
+    if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'atomic swap fee'})
   elif action in ['claim_hard_reward', 'claim_harvest_reward']:
     transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
@@ -237,10 +251,10 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
     except IndexError as e:
       print('no SWP reward on delegator')
   elif action == 'createAtomicSwap':
-    if fee == 0: return results 
+    if fee == 0: return results
     message_attributes = list(filter(lambda item: item['type'] == 'message', events))[0]['attributes']
     sender = list(filter(lambda item: item['key'] == 'sender', message_attributes))[0]['value']
-    if sender != address: return results 
+    if sender != address: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'atomic swap fee'})
   elif action in ['delegate','withdraw_delegator_reward']:
     try:
@@ -252,16 +266,16 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
     except IndexError as e:
       print('this time. no auto claim reward.')
   elif action in ['hard_deposit', 'harvest_deposit']:
-    if fee == 0: return results 
+    if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'hard deposit'})
   elif action in ['hard_withdraw', 'harvest_withdraw']:
-    if fee == 0: return results 
+    if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'hard withdraw'})
   elif action == 'refundAtomicSwap':
-    if fee == 0: return results 
+    if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'refund atomic swap'})
   elif action == 'send':
-    if fee == 0: return results 
+    if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'send'})
   elif action == 'begin_unbonding':
     try:
@@ -273,7 +287,7 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
     except IndexError as e:
       print('this time. no auto claim reward.')
   elif action == 'vote':
-    if fee == 0: return results 
+    if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'vote'})
   elif action == 'swap_exact_for_tokens':
     print('swap_exact_for_tokens')
@@ -284,6 +298,11 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
   #print(results)
   return results
 
+
+def main():
+  addresses = get_wallet_address()
+  for address in addresses:
+    create_cryptact_csv(address)
 
 
 if __name__== '__main__':
