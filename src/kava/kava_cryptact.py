@@ -6,6 +6,7 @@ from decimal import Decimal
 import pandas as pd
 from datetime import datetime as dt
 import re
+import os
 
 # types on mintscan web      : types on mintscan api
 # CDP Draw Debt              : draw_cdp
