@@ -129,10 +129,12 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
     if fee == 0: return results
     results.append({'Timestamp': timestamp, 'Source': 'kava', 'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'deposit cdp https://www.mintscan.io/kava/txs/%s' % txhash})
   elif action == 'swap/MsgSwapExactForTokens':
+    input_denominator = Decimal('1000000') if tx_msg['value']['exact_token_a']['denom'] != 'busd' else Decimal('100000000')
     input_token = tx_msg['value']['exact_token_a']['denom'].upper()
-    input_amount = Decimal(tx_msg['value']['exact_token_a']['amount'])/ Decimal('1000000')
+    input_amount = Decimal(tx_msg['value']['exact_token_a']['amount'])/ input_denominator
+    output_denominator = Decimal('1000000') if tx_msg['value']['token_b']['denom'] != 'busd' else Decimal('100000000')
     output_token = tx_msg['value']['token_b']['denom'].upper()
-    output_amount = Decimal(tx_msg['value']['token_b']['amount'])/ Decimal('1000000')
+    output_amount = Decimal(tx_msg['value']['token_b']['amount'])/ output_denominator
     price = output_amount / input_amount
     results.append({'Timestamp': timestamp, 'Source': 'kava', 'Action': 'SELL', 'Base': input_token, 'Volume': input_amount, 'Price': price, 'Counter': output_token, 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'swap https://www.mintscan.io/kava/txs/%s' % txhash})
 
