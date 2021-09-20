@@ -7,6 +7,10 @@ import pandas as pd
 from datetime import datetime as dt
 import re
 import os
+import logging
+
+logger = logging.getLogger(name=__name__)
+logger.addHandler(logging.NullHandler())
 
 # types on mintscan web      : types on mintscan api
 # CDP Draw Debt              : draw_cdp
@@ -30,6 +34,13 @@ import os
 # Send                       : send
 # Undelegate                 : begin_unbonding
 # Vote                       : vote
+
+def set_root_logger():
+  root_logget = logging.getLogger(name=None)
+  root_logget.setLevel(logging.INFO)
+  stream_handler = logging.StreamHandler()
+  stream_handler.setLevel(logging.INFO)
+  root_logget.addHandler(stream_handler)
 
 def read_config():
   f = open(".env.json","r")
@@ -71,7 +82,7 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
       cdp = list(filter(lambda item: item['collateral_token'] == collateral_token, cdp_trucker))[0]
       cdp['debt_amount'] += debt_amount
     except IndexError as e:
-      print('cdp/MsgDrawDebt. CDP does not exist!!!!!!')
+      logger.critical('cdp/MsgDrawDebt. CDP does not exist!!!!!!')
       raise e
 
     results.append({'Timestamp': timestamp, 'Source': 'kava', 'Action': 'BORROW', 'Base': 'USDX', 'Volume': debt_amount, 'Price': 110, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'cdp draw https://www.mintscan.io/kava/txs/%s' % txhash})
@@ -100,7 +111,7 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
         cdp['debt_amount'] -= repay_amount
         results.append({'Timestamp': timestamp, 'Source': 'kava', 'Action': 'RETURN', 'Base': 'USDX', 'Volume': repay_amount, 'Price': 110, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'cdp repay https://www.mintscan.io/kava/txs/%s' % txhash})
     except IndexError as e:
-      print('cdp/MsgRepayDebt. CDP does not exist!!!!!!')
+      logger.critical('cdp/MsgRepayDebt. CDP does not exist!!!!!!')
       raise e
   elif action == 'cdp/MsgWithdraw':
     collateral_token = tx_msg['value']['collateral_type']
@@ -111,7 +122,7 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
         raise ValueError('%s: withdraw amount (%s) is bigger than collateral amount (%s).' % collateral_token, collateral_amount, cdp['collateral_amount'])
       cdp['collateral_amount'] -= Decimal(collateral_amount)
     except IndexError as e:
-      print('cdp/MsgWithdraw. CDP does not exist!!!!!!')
+      logger.critical('cdp/MsgWithdraw. CDP does not exist!!!!!!')
       raise e
 
     if fee == 0: return results
@@ -123,7 +134,7 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
       cdp = list(filter(lambda item: item['collateral_token'] == collateral_token, cdp_trucker))[0]
       cdp['collateral_amount'] += Decimal(collateral_amount)
     except IndexError as e:
-      print('cdp/MsgDeposit. CDP does not exist!!!!!!')
+      logger.critical('cdp/MsgDeposit. CDP does not exist!!!!!!')
       raise e
 
     if fee == 0: return results
@@ -155,12 +166,12 @@ def create_cryptact_csv(address):
   transactions.reverse()
 
   cdp_trucker = []
-  #print(address)
+  #logger.debug(address)
   for transaction in transactions:
     #transaction = json.loads(transaction)
-    #print(transaction)
-    print(json.dumps(transaction['header'], indent=2))
-    #print(json.dumps(transaction, indent=2))
+    #logger.debug(transaction)
+    logger.debug(json.dumps(transaction['header'], indent=2))
+    #logger.debug(json.dumps(transaction, indent=2))
     chain_id = transaction['header']['chain_id']
     timestamp = dt.strptime(transaction['header']['timestamp'], '%Y-%m-%dT%H:%M:%SZ')
     txhash = transaction['data']['txhash']
@@ -169,9 +180,9 @@ def create_cryptact_csv(address):
       fee = transaction['data']['tx']['value']['fee']['amount'][0]['amount']
       fee = Decimal(fee) / Decimal('1000000')
     except IndexError as e:
-      print('this time has no fee.')
+      logger.critical('this time has no fee.')
 
-    #print(fee)
+    #logger.debug(fee)
     if 'logs' in transaction['data']:
       results += cdp_tracking(cdp_trucker, transaction, fee, timestamp)
       logs = transaction['data']['logs']
@@ -179,31 +190,31 @@ def create_cryptact_csv(address):
         events = log['events']
         results += classify(timestamp, events, fee, txhash, address, chain_id)
     else:
-      print(json.dumps(transaction['data']['raw_log']))
+      logger.debug(json.dumps(transaction['data']['raw_log']))
 
   df = pd.DataFrame(results)
   df = df.sort_values('Timestamp')
-  #print(df)
+  #logger.debug(df)
   result_file_name = 'kava_cryptact_%s.csv' % address
   df.to_csv(result_file_name, index=False, columns=['Timestamp', 'Action', 'Source', 'Base', 'Volume', 'Price', 'Counter', 'Fee', 'FeeCcy', 'Comment'])
 
 
 def classify(timestamp, events, fee, txhash, address, chain_id):
   results = []
-  #print(json.dumps(events, indent=2))
+  #logger.debug(json.dumps(events, indent=2))
   message = list(filter(lambda item: item['type'] == 'message', events))[0]
   action = list(filter(lambda item: item['key'] == 'action', message['attributes']))[0]['value']
-  #print(events)
+  #logger.debug(events)
   if action == 'create_cdp':
-    print('create_cdp')
+    logger.info('create_cdp')
   elif action == 'draw_cdp':
-    print('draw_cdp')
+    logger.info('draw_cdp')
   elif action == 'deposit_cdp':
-    print('deposit_cdp')
+    logger.info('deposit_cdp')
   elif action == 'repay_cdp':
-    print('repay_cdp')
+    logger.info('repay_cdp')
   elif action == 'withdraw_cdp':
-    print('withdraw_cdp')
+    logger.info('withdraw_cdp')
   elif action == 'claimAtomicSwap':
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'atomic swap fee'})
@@ -224,7 +235,7 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
       kava_amount = Decimal(kava_amount.replace('ukava', '')) / Decimal('1000000')
       results.append({'Action': 'LENDING', 'Base': 'KAVA', 'Volume': kava_amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim KAVA of hard lending reward'})
     except IndexError as e:
-      print('no KAVA reward on hard')
+      logger.critical('no KAVA reward on hard')
 
   elif action in ['claim_usdx_minting_reward', 'claim_reward']:
     transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
@@ -245,14 +256,14 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
       hard_amount = Decimal(hard_amount.replace('hard', '')) / Decimal('1000000')
       results.append({'Action': 'STAKING', 'Base': 'HARD', 'Volume': hard_amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim delegator reward'})
     except IndexError as e:
-      print('no HARD reward on delegator')
+      logger.critical('no HARD reward on delegator')
 
     try:
       swp_amount = list(filter(lambda item: 'swp' in item, amounts))[0]
       swp_amount = Decimal(swp_amount.replace('swp', '')) / Decimal('1000000')
       results.append({'Action': 'STAKING', 'Base': 'SWP', 'Volume': swp_amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim delegator reward'})
     except IndexError as e:
-      print('no SWP reward on delegator')
+      logger.critical('no SWP reward on delegator')
   elif action == 'createAtomicSwap':
     if fee == 0: return results
     message_attributes = list(filter(lambda item: item['type'] == 'message', events))[0]['attributes']
@@ -267,7 +278,7 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
       amount = Decimal(amount.replace('ukava', '')) / Decimal('1000000')
       results.append({'Action': 'STAKING', 'Base': 'KAVA', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim staking reward'})
     except IndexError as e:
-      print('this time. no auto claim reward.')
+      logger.critical('this time. no auto claim reward.')
   elif action in ['hard_deposit', 'harvest_deposit']:
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'hard deposit'})
@@ -288,17 +299,17 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
       amount = Decimal(amount.replace('ukava', '')) / Decimal('1000000')
       results.append({'Action': 'STAKING', 'Base': 'KAVA', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim staking reward'})
     except IndexError as e:
-      print('this time. no auto claim reward.')
+      logger.critical('this time. no auto claim reward.')
   elif action == 'vote':
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'vote'})
   elif action == 'swap_exact_for_tokens':
-    print('swap_exact_for_tokens')
+    logger.info('swap_exact_for_tokens')
   else:
     raise ValueError('%s: this is undefined action ...' % action)
 
   results = list(map(lambda item: item|{'Timestamp': timestamp, 'Source': 'kava', 'Comment': item['Comment'] + ' https://www.mintscan.io/kava/txs/%s' % txhash}, results))
-  #print(results)
+  #logger.debug(results)
   return results
 
 
@@ -309,5 +320,6 @@ def main():
 
 
 if __name__== '__main__':
-    main()
+  set_root_logger()
+  main()
 

@@ -3,11 +3,24 @@ import time
 import json
 import sys
 import os
+import logging
+
+logger = logging.getLogger(name=__name__)
+logger.addHandler(logging.NullHandler())
+
+def set_root_logger():
+  root_logget = logging.getLogger(name=None)
+  root_logget.setLevel(logging.DEBUG)
+  stream_handler = logging.StreamHandler()
+  stream_handler.setLevel(logging.DEBUG)
+  root_logget.addHandler(stream_handler)
+
 
 def read_config():
   f = open(".env.json","r")
   env_dict = json.load(f)
   return env_dict
+
 
 def get_wallet_address():
   if "KAVA_WALLET_ADDRESS" in os.environ:
@@ -39,7 +52,7 @@ def get_transactions(address):
 
 def main():
   addresses = get_wallet_address()
-  print(addresses)
+  logger.info(addresses)
   #print(address)
   for address in addresses:
     # print(address)
@@ -47,5 +60,6 @@ def main():
 
 
 if __name__== '__main__':
-    main()
+  set_root_logger()
+  main()
 
