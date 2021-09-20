@@ -8,6 +8,8 @@ from datetime import datetime as dt
 import re
 import os
 import logging
+import re
+from typing import Union
 
 logger = logging.getLogger(name=__name__)
 logger.addHandler(logging.NullHandler())
@@ -55,6 +57,21 @@ def get_wallet_address():
   else:
     return sys.argv[1].split(",")
 
+# def split_amount(value:str)->tuple(int,str):
+def split_amount(value:str)-> Union[int, str]:
+  amount = re.findall(r'\d+',value)[0]
+  currency = re.findall(r'\D+',value)[0]
+  logger.debug(f'split_amount : {amount} {currency}')
+  currency_mapping = {
+    'ukava':{'Name':'KAVA','precision':6},
+    'hard':{'Name':'HARD','precision':6},
+    'swp':{'Name':'SWP','precision':6},
+    'busd':{'Name':'BUSD','precision':8},
+    'usdx':{'Name':'USDX','precision':6},
+  }
+  amount = Decimal(amount) / Decimal(str(10**currency_mapping[currency]["precision"]))
+  currency = currency_mapping[currency]["Name"]
+  return amount,currency
 
 def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
   results = []
@@ -279,6 +296,9 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
       results.append({'Action': 'STAKING', 'Base': 'KAVA', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim staking reward'})
     except IndexError as e:
       logger.critical('this time. no auto claim reward.')
+  elif action in ['begin_redelegate']:
+    if fee == 0: return results
+    results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'begin_redelegate'})
   elif action in ['hard_deposit', 'harvest_deposit']:
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'hard deposit'})
@@ -303,6 +323,20 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
   elif action == 'vote':
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'vote'})
+  elif action == 'hard_borrow':
+    # logger.debug(f"events : {events}")
+    hard_borrow = list(filter(lambda item: item['type'] == 'hard_borrow', events))[0]
+    amount_value = list(filter(lambda item: item['key'] == 'borrow_coins', hard_borrow['attributes']))[0]['value']
+    amount, currency = split_amount(amount_value)
+    logger.debug(f"borrow amount : {amount} {currency}")
+    results.append({'Action': 'BORROW', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'hard borrow'})
+  elif action == 'hard_repay':
+    # logger.info(f"events : {events}")
+    hard_repay = list(filter(lambda item: item['type'] == 'hard_repay', events))[0]
+    amount_value = list(filter(lambda item: item['key'] == 'repay_coins', hard_repay['attributes']))[0]['value']
+    amount, currency = split_amount(amount_value)
+    logger.debug(f"repay amount : {amount} {currency}")
+    results.append({'Action': 'BORROW', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'hard repay'})
   elif action == 'swap_exact_for_tokens':
     logger.info('swap_exact_for_tokens')
   else:
