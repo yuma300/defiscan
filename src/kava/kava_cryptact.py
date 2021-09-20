@@ -36,6 +36,11 @@ logger.addHandler(logging.NullHandler())
 # Send                       : send
 # Undelegate                 : begin_unbonding
 # Vote                       : vote
+# HARD Withdraw              : hard_borrow
+# HARD Repay                 : hard_repay
+# Deposit                    : swap_deposit
+# Withdraw                   : swap_withdraw
+# Claim Swap Reward          : claim_swap_reward
 
 def set_root_logger():
   root_logget = logging.getLogger(name=None)
@@ -58,7 +63,7 @@ def get_wallet_address():
     return sys.argv[1].split(",")
 
 # def split_amount(value:str)->tuple(int,str):
-def split_amount(value:str)-> Union[int, str]:
+def split_amount(value:str)-> Union[Decimal, str]:
   amount = re.findall(r'\d+',value)[0]
   currency = re.findall(r'\D+',value)[0]
   logger.debug(f'split_amount : {amount} {currency}')
@@ -215,9 +220,10 @@ def create_cryptact_csv(address):
   result_file_name = 'kava_cryptact_%s.csv' % address
   df.to_csv(result_file_name, index=False, columns=['Timestamp', 'Action', 'Source', 'Base', 'Volume', 'Price', 'Counter', 'Fee', 'FeeCcy', 'Comment'])
 
-
+swp_lp_amount = {} # for reqidity provide calc variable
 def classify(timestamp, events, fee, txhash, address, chain_id):
   results = []
+  global swp_lp_amount
   #logger.debug(json.dumps(events, indent=2))
   message = list(filter(lambda item: item['type'] == 'message', events))[0]
   action = list(filter(lambda item: item['key'] == 'action', message['attributes']))[0]['value']
@@ -339,6 +345,69 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
     results.append({'Action': 'BORROW', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'hard repay'})
   elif action == 'swap_exact_for_tokens':
     logger.info('swap_exact_for_tokens')
+  elif action == 'swap_deposit':
+    logger.info(action)
+    logger.debug(f"events : {events}")
+    logger.debug(f"swp_lp_amount: {swp_lp_amount}")
+    swap_deposit = list(filter(lambda item: item['type'] == 'swap_deposit', events))[0]
+    pool_id = list(filter(lambda item: item['key'] == 'pool_id', swap_deposit['attributes']))[0]['value']
+    amount_values = list(filter(lambda item: item['key'] == 'amount', swap_deposit['attributes']))[0]['value']
+    shares = list(filter(lambda item: item['key'] == 'shares', swap_deposit['attributes']))[0]['value']
+    amounts = {}
+    for amount_value in amount_values.split(","):
+      amount, currency = split_amount(amount_value)
+      amounts[currency] = amount
+    logger.debug(f"amount: {amount}")
+
+    # initialize
+    if pool_id not in swp_lp_amount:
+      swp_lp_amount[pool_id] = {}
+    if "shares" not in swp_lp_amount[pool_id]:
+      swp_lp_amount[pool_id]["shares"] = Decimal("0")
+    for currency in amounts.keys():
+      if currency not in swp_lp_amount[pool_id]:
+        swp_lp_amount[pool_id][currency] = Decimal("0")
+
+    for currency, amount in amounts.items():
+      swp_lp_amount[pool_id][currency] += amount
+    logger.debug(f"swp_lp_amount: {swp_lp_amount}")
+    logger.debug(f"shares: {shares}")
+    swp_lp_amount[pool_id]["shares"] += Decimal(shares)
+  elif action == 'swap_withdraw':
+    logger.info(action)
+    logger.debug(f"events : {events}")
+    swap_withdraw = list(filter(lambda item: item['type'] == 'swap_withdraw', events))[0]
+    pool_id = list(filter(lambda item: item['key'] == 'pool_id', swap_withdraw['attributes']))[0]['value']
+    amount_values = list(filter(lambda item: item['key'] == 'amount', swap_withdraw['attributes']))[0]['value']
+    shares = list(filter(lambda item: item['key'] == 'shares', swap_withdraw['attributes']))[0]['value']
+    amounts = {}
+    for amount_value in amount_values.split(","):
+      amount, currency = split_amount(amount_value)
+      amounts[currency] = amount
+    logger.debug(f"amount: {amount}")
+    if swp_lp_amount[pool_id]["shares"] - Decimal(shares) < 0:
+      raise ValueError("Withdrawals are occurring beyond expectations.")
+    swp_lp_amount[pool_id]["shares"] -= Decimal(shares)
+    for currency, amount in amounts.items():
+      if swp_lp_amount[pool_id][currency] - amount >= 0:
+        swp_lp_amount[pool_id][currency] -= amount
+      elif swp_lp_amount[pool_id][currency] - amount < 0:
+        bonus_amount = amount - swp_lp_amount[pool_id][currency]
+        swp_lp_amount[pool_id][currency] -= bonus_amount
+        results.append({'Action': 'BONUS', 'Base': currency, 'Volume': bonus_amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'Liquidity Provide Bonus'})
+    if swp_lp_amount[pool_id]["shares"] == 0:
+      for currency, amount in amounts.items():
+        if swp_lp_amount[pool_id][currency] > 0:
+          sell_amount = swp_lp_amount[pool_id][currency]
+          results.append({'Action': 'SELL', 'Base': currency, 'Volume': sell_amount, 'Price': 0, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'Liquidity Provide Sell'})
+  elif action == 'claim_swap_reward':
+    logger.info(action)
+    logger.debug(f"events : {events}")
+    claim_reward = list(filter(lambda item: item['type'] == 'claim_reward', events))[0]
+    amount_value = list(filter(lambda item: item['key'] == 'claim_amount', claim_reward['attributes']))[0]['value']
+    amount, currency = split_amount(amount_value)
+    logger.debug(f"claim amount : {amount} {currency}")
+    results.append({'Action': 'BONUS', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'Claim Swap Reward'})
   else:
     raise ValueError('%s: this is undefined action ...' % action)
 
