@@ -350,10 +350,10 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
     logger.debug(f"repay amount : {amount} {currency}")
     hard_rending_amount[currency] -= amount
     if hard_rending_amount[currency] < 0:
-      bonus_amount = hard_rending_amount[currency] * -1 # bonus = -bonus * -1
+      debut_amount = hard_rending_amount[currency] * -1 # debut = -debut * -1
       hard_rending_amount[currency] = Decimal(0)
-      results.append({'Action': 'BONUS', 'Base': currency, 'Volume': bonus_amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'hard repay'})
-      amount = amount - bonus_amount # repay = all - bonus
+      results.append({'Action': 'SELL', 'Base': currency, 'Volume': debut_amount, 'Price': 0, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'hard repay'})
+      amount = amount - debut_amount # repay = all - debut
     results.append({'Action': 'RETURN', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'hard repay'})
   elif action == 'swap_exact_for_tokens':
     logger.info('swap_exact_for_tokens')
