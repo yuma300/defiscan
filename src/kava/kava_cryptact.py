@@ -221,9 +221,11 @@ def create_cryptact_csv(address):
   df.to_csv(result_file_name, index=False, columns=['Timestamp', 'Action', 'Source', 'Base', 'Volume', 'Price', 'Counter', 'Fee', 'FeeCcy', 'Comment'])
 
 swp_lp_amount = {} # for reqidity provide calc variable
+hard_rending_amount = {} # for rending deposit calc variable
 def classify(timestamp, events, fee, txhash, address, chain_id):
   results = []
   global swp_lp_amount
+  global hard_rending_amount
   #logger.debug(json.dumps(events, indent=2))
   message = list(filter(lambda item: item['type'] == 'message', events))[0]
   action = list(filter(lambda item: item['key'] == 'action', message['attributes']))[0]['value']
@@ -335,6 +337,10 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
     amount_value = list(filter(lambda item: item['key'] == 'borrow_coins', hard_borrow['attributes']))[0]['value']
     amount, currency = split_amount(amount_value)
     logger.debug(f"borrow amount : {amount} {currency}")
+    # initialize
+    if currency not in hard_rending_amount:
+      hard_rending_amount[currency] = Decimal(0)
+    hard_rending_amount[currency] += amount
     results.append({'Action': 'BORROW', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'hard borrow'})
   elif action == 'hard_repay':
     # logger.info(f"events : {events}")
@@ -342,7 +348,13 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
     amount_value = list(filter(lambda item: item['key'] == 'repay_coins', hard_repay['attributes']))[0]['value']
     amount, currency = split_amount(amount_value)
     logger.debug(f"repay amount : {amount} {currency}")
-    results.append({'Action': 'BORROW', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'hard repay'})
+    hard_rending_amount[currency] -= amount
+    if hard_rending_amount[currency] < 0:
+      bonus_amount = hard_rending_amount[currency] * -1 # bonus = -bonus * -1
+      hard_rending_amount[currency] = Decimal(0)
+      results.append({'Action': 'BONUS', 'Base': currency, 'Volume': bonus_amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'hard repay'})
+      amount = amount - bonus_amount # repay = all - bonus
+    results.append({'Action': 'RETURN', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'hard repay'})
   elif action == 'swap_exact_for_tokens':
     logger.info('swap_exact_for_tokens')
   elif action == 'swap_deposit':
