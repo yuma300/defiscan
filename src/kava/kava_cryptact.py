@@ -162,14 +162,15 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
     if fee == 0: return results
     results.append({'Timestamp': timestamp, 'Source': 'kava', 'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'deposit cdp https://www.mintscan.io/kava/txs/%s' % txhash})
   elif action == 'swap/MsgSwapExactForTokens':
-    input_denominator = Decimal('1000000') if tx_msg['value']['exact_token_a']['denom'] != 'busd' else Decimal('100000000')
-    input_token = tx_msg['value']['exact_token_a']['denom'].upper()
-    input_amount = Decimal(tx_msg['value']['exact_token_a']['amount'])/ input_denominator
-    output_denominator = Decimal('1000000') if tx_msg['value']['token_b']['denom'] != 'busd' else Decimal('100000000')
-    output_token = tx_msg['value']['token_b']['denom'].upper()
-    output_amount = Decimal(tx_msg['value']['token_b']['amount'])/ output_denominator
-    price = output_amount / input_amount
-    results.append({'Timestamp': timestamp, 'Source': 'kava', 'Action': 'SELL', 'Base': input_token, 'Volume': input_amount, 'Price': price, 'Counter': output_token, 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'swap https://www.mintscan.io/kava/txs/%s' % txhash})
+    pass
+    # input_denominator = Decimal('1000000') if tx_msg['value']['exact_token_a']['denom'] != 'busd' else Decimal('100000000')
+    # input_token = tx_msg['value']['exact_token_a']['denom'].upper()
+    # input_amount = Decimal(tx_msg['value']['exact_token_a']['amount'])/ input_denominator
+    # output_denominator = Decimal('1000000') if tx_msg['value']['token_b']['denom'] != 'busd' else Decimal('100000000')
+    # output_token = tx_msg['value']['token_b']['denom'].upper()
+    # output_amount = Decimal(tx_msg['value']['token_b']['amount'])/ output_denominator
+    # price = output_amount / input_amount
+    # results.append({'Timestamp': timestamp, 'Source': 'kava', 'Action': 'SELL', 'Base': input_token, 'Volume': input_amount, 'Price': price, 'Counter': output_token, 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'swap https://www.mintscan.io/kava/txs/%s' % txhash})
 
   #print(cdp_trucker)
   return results
@@ -356,8 +357,23 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
       amount = amount - debut_amount # repay = all - debut
     if amount > Decimal(0):
       results.append({'Action': 'RETURN', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'hard repay'})
-  elif action == 'swap_exact_for_tokens':
-    logger.info('swap_exact_for_tokens')
+  elif action in ['swap_exact_for_tokens','swap_for_exact_tokens']:
+    logger.info(action)
+    swap_trade = list(filter(lambda item: item['type'] == 'swap_trade', events))[0]
+    logger.debug(swap_trade)
+    input_amount_value = list(filter(lambda item: item['key'] == 'input', swap_trade['attributes']))[0]['value']
+    input_amount, input_currency = split_amount(input_amount_value)
+    output_amount_value = list(filter(lambda item: item['key'] == 'output', swap_trade['attributes']))[0]['value']
+    output_amount, output_currency = split_amount(output_amount_value)
+    exact = list(filter(lambda item: item['key'] == 'exact', swap_trade['attributes']))[0]['value']
+    if exact == 'input':
+      price = input_amount / output_amount
+      results.append({'Action': "BUY", 'Base': output_currency, 'Volume': output_amount, 'Price': price, 'Counter': input_currency, 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'swap'})
+    elif exact == 'output':
+      price = output_amount / input_amount
+      results.append({'Action': "SELL", 'Base': input_currency, 'Volume': input_amount, 'Price': price, 'Counter': output_currency, 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'swap'})
+    else:
+      raise ValueError(f"unknown exact: {exact}")
   elif action == 'swap_deposit':
     logger.info(action)
     logger.debug(f"events : {events}")
