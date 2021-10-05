@@ -1,3 +1,4 @@
+from sys import version
 import unittest
 from unittest.mock import *
 import os
@@ -10,20 +11,20 @@ class TestMessage(unittest.TestCase):
   """verify get_caaj works fine"""
 
   def test_get_result(self):
-    v4_withdraw_delegator_reward = json.loads(Path('%s/../testdata/withdraw_delegator_reward_v4.json' % os.path.dirname(__file__)).read_text())
-    message = Message(v4_withdraw_delegator_reward['data']['logs'][0]['events'], v4_withdraw_delegator_reward['data']['height'])
-    result = message.get_result()
-    self.assertEqual(result['action'], 'withdraw_delegator_reward')
-
-    v3_delegate = json.loads(Path('%s/../testdata/delegate_v3.json' % os.path.dirname(__file__)).read_text())
-    message = Message(v3_delegate['data']['logs'][0]['events'], v3_delegate['data']['height'])
-    result = message.get_result()
-    self.assertEqual(result['action'], 'delegate')
-
-    v3_send = json.loads(Path('%s/../testdata/send_v3.json' % os.path.dirname(__file__)).read_text())
-    message = Message(v3_send['data']['logs'][0]['events'], v3_send['data']['height'])
-    result = message.get_result()
-    self.assertEqual(result['action'], 'send')
+    for action_dict in [{'action': 'withdraw_delegator_reward', 'version': 'v4'},
+                        {'action': 'delegate', 'version': 'v3'},
+                        {'action': 'begin_unbonding', 'version': 'v3'}, 
+                        {'action': 'send', 'version': 'v3'},
+                        {'action': 'swap_within_batch', 'version': 'v4'},
+                        {'action': 'deposit_within_batch', 'version': 'v4'},
+                        {'action': 'withdraw_within_batch', 'version': 'v4'},
+                        {'action': 'vote', 'version': 'v4'}]:
+      action = action_dict['action']
+      version = action_dict['version']
+      transaction_json = json.loads(Path(f'{os.path.dirname(__file__)}/../testdata/{action}_{version}.json').read_text())
+      message = Message(transaction_json['data']['logs'][0]['events'], transaction_json['data']['height'])
+      result = message.get_result()
+      self.assertEqual(result['action'], action)
 
   def test_as_withdraw_delegator_reward(self):
     v4_withdraw_delegator_reward = json.loads(Path('%s/../testdata/withdraw_delegator_reward_v4.json' % os.path.dirname(__file__)).read_text())
