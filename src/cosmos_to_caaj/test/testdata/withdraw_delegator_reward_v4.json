@@ -1,0 +1,125 @@
+{
+    "header": {
+      "id": 3144656,
+      "chain_id": "cosmoshub-4",
+      "block_id": 8681633,
+      "timestamp": "2021-02-25T01:30:36Z"
+    },
+    "data": {
+      "height": "5279632",
+      "txhash": "C8D6E30E4068BA8986E3EABA0979AB2C2006129CFF6B619A4444C43E3BB421D8",
+      "codespace": "",
+      "code": 0,
+      "data": "0A1B0A1977697468647261775F64656C656761746F725F726577617264",
+      "raw_log": "[{\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"withdraw_delegator_reward\"},{\"key\":\"sender\",\"value\":\"cosmos1jv65s3grqf6v6jl3dp4t6c9t9rk99cd88lyufl\"},{\"key\":\"module\",\"value\":\"distribution\"},{\"key\":\"sender\",\"value\":\"cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7\"},{\"key\":\"sender\",\"value\":\"cosmos1jv65s3grqf6v6jl3dp4t6c9t9rk99cd88lyufl\"},{\"key\":\"amount\",\"value\":\"888455uatom\"}]},{\"type\":\"withdraw_rewards\",\"attributes\":[{\"key\":\"amount\",\"value\":\"888455uatom\"},{\"key\":\"validator\",\"value\":\"cosmosvaloper12w6tynmjzq4l8zdla3v4x0jt8lt4rcz5gk7zg2\"}]}]}]",
+      "logs": [
+        {
+          "msg_index": 0,
+          "log": "",
+          "events": [
+            {
+              "type": "message",
+              "attributes": [
+                {
+                  "key": "action",
+                  "value": "withdraw_delegator_reward"
+                },
+                {
+                  "key": "sender",
+                  "value": "cosmos1jv65s3grqf6v6jl3dp4t6c9t9rk99cd88lyufl"
+                },
+                {
+                  "key": "module",
+                  "value": "distribution"
+                },
+                {
+                  "key": "sender",
+                  "value": "cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7"
+                }
+              ]
+            },
+            {
+              "type": "transfer",
+              "attributes": [
+                {
+                  "key": "recipient",
+                  "value": "cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7"
+                },
+                {
+                  "key": "sender",
+                  "value": "cosmos1jv65s3grqf6v6jl3dp4t6c9t9rk99cd88lyufl"
+                },
+                {
+                  "key": "amount",
+                  "value": "888455uatom"
+                }
+              ]
+            },
+            {
+              "type": "withdraw_rewards",
+              "attributes": [
+                {
+                  "key": "amount",
+                  "value": "888455uatom"
+                },
+                {
+                  "key": "validator",
+                  "value": "cosmosvaloper12w6tynmjzq4l8zdla3v4x0jt8lt4rcz5gk7zg2"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "info": "",
+      "gas_wanted": "150000",
+      "gas_used": "112639",
+      "tx": {
+        "@type": "/cosmos.tx.v1beta1.Tx",
+        "body": {
+          "messages": [
+            {
+              "@type": "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward",
+              "delegator_address": "cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7",
+              "validator_address": "cosmosvaloper12w6tynmjzq4l8zdla3v4x0jt8lt4rcz5gk7zg2"
+            }
+          ],
+          "memo": "",
+          "timeout_height": "0",
+          "extension_options": [],
+          "non_critical_extension_options": []
+        },
+        "auth_info": {
+          "signer_infos": [
+            {
+              "public_key": {
+                "@type": "/cosmos.crypto.secp256k1.PubKey",
+                "key": "A5nTl93uUtkqIyYj+D2YfaB1hd4EzeiemJrlPNqSA+Lj"
+              },
+              "mode_info": {
+                "single": {
+                  "mode": "SIGN_MODE_LEGACY_AMINO_JSON"
+                }
+              },
+              "sequence": "0"
+            }
+          ],
+          "fee": {
+            "amount": [
+              {
+                "denom": "uatom",
+                "amount": "300"
+              }
+            ],
+            "gas_limit": "150000",
+            "payer": "",
+            "granter": ""
+          }
+        },
+        "signatures": [
+          "WkHQQgR58rK033JfVOPeUXWIOqL8qxR6hi20aGO1gWU7mB9sbaZimw8Xh5lM6iEyZDP7Saz0OSfEfPe0/3yGvw=="
+        ]
+      },
+      "timestamp": "2021-02-25T01:30:36Z"
+    }
+  }

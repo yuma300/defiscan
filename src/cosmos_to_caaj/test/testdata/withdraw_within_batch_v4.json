@@ -1,0 +1,137 @@
+{
+	"header": {
+		"id": 6034715,
+		"chain_id": "cosmoshub-4",
+		"block_id": 11287747,
+		"timestamp": "2021-10-04T06:13:53Z"
+	},
+	"data": {
+		"height": "7885736",
+		"txhash": "27F07212BB65D3ECFBF5A2549513387AE69BAC674E9909AF6E4564A9767C62D5",
+		"codespace": "",
+		"code": 0,
+		"data": "0A170A1577697468647261775F77697468696E5F6261746368",
+		"raw_log": "[{\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"withdraw_within_batch\"},{\"key\":\"sender\",\"value\":\"cosmos1697eu6zsqnghmac28a2d30y3ffxehpztezgrnq\"},{\"key\":\"module\",\"value\":\"liquidity\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"cosmos1tx68a8k9yz54z06qfve9l2zxvgsz4ka3hr8962\"},{\"key\":\"sender\",\"value\":\"cosmos1697eu6zsqnghmac28a2d30y3ffxehpztezgrnq\"},{\"key\":\"amount\",\"value\":\"245poolBD5F1AF7A8B1F068C178F1D637DF126968EC10AB204A10116E320B2B8AF4FAC2\"}]},{\"type\":\"withdraw_within_batch\",\"attributes\":[{\"key\":\"pool_id\",\"value\":\"9\"},{\"key\":\"batch_index\",\"value\":\"3265\"},{\"key\":\"msg_index\",\"value\":\"83\"},{\"key\":\"pool_coin_denom\",\"value\":\"poolBD5F1AF7A8B1F068C178F1D637DF126968EC10AB204A10116E320B2B8AF4FAC2\"},{\"key\":\"pool_coin_amount\",\"value\":\"245\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "withdraw_within_batch"
+							},
+							{
+								"key": "sender",
+								"value": "cosmos1697eu6zsqnghmac28a2d30y3ffxehpztezgrnq"
+							},
+							{
+								"key": "module",
+								"value": "liquidity"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "cosmos1tx68a8k9yz54z06qfve9l2zxvgsz4ka3hr8962"
+							},
+							{
+								"key": "sender",
+								"value": "cosmos1697eu6zsqnghmac28a2d30y3ffxehpztezgrnq"
+							},
+							{
+								"key": "amount",
+								"value": "245poolBD5F1AF7A8B1F068C178F1D637DF126968EC10AB204A10116E320B2B8AF4FAC2"
+							}
+						]
+					},
+					{
+						"type": "withdraw_within_batch",
+						"attributes": [
+							{
+								"key": "pool_id",
+								"value": "9"
+							},
+							{
+								"key": "batch_index",
+								"value": "3265"
+							},
+							{
+								"key": "msg_index",
+								"value": "83"
+							},
+							{
+								"key": "pool_coin_denom",
+								"value": "poolBD5F1AF7A8B1F068C178F1D637DF126968EC10AB204A10116E320B2B8AF4FAC2"
+							},
+							{
+								"key": "pool_coin_amount",
+								"value": "245"
+							}
+						]
+					}
+				]
+			}
+		],
+		"info": "",
+		"gas_wanted": "500000",
+		"gas_used": "137845",
+		"tx": {
+			"@type": "/cosmos.tx.v1beta1.Tx",
+			"body": {
+				"messages": [
+					{
+						"@type": "/tendermint.liquidity.v1beta1.MsgWithdrawWithinBatch",
+						"withdrawer_address": "cosmos1697eu6zsqnghmac28a2d30y3ffxehpztezgrnq",
+						"pool_id": "9",
+						"pool_coin": {
+							"denom": "poolBD5F1AF7A8B1F068C178F1D637DF126968EC10AB204A10116E320B2B8AF4FAC2",
+							"amount": "245"
+						}
+					}
+				],
+				"memo": "",
+				"timeout_height": "0",
+				"extension_options": [],
+				"non_critical_extension_options": []
+			},
+			"auth_info": {
+				"signer_infos": [
+					{
+						"public_key": {
+							"@type": "/cosmos.crypto.secp256k1.PubKey",
+							"key": "AvQTwt/bpA2iAybXRKB/knEIhN0fvzlqPeLJkmW/3B9L"
+						},
+						"mode_info": {
+							"single": {
+								"mode": "SIGN_MODE_LEGACY_AMINO_JSON"
+							}
+						},
+						"sequence": "29"
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "uatom",
+							"amount": "12500"
+						}
+					],
+					"gas_limit": "500000",
+					"payer": "",
+					"granter": ""
+				}
+			},
+			"signatures": [
+				"GSBxSWnw9oqsGqkdRgUoK0+Ibpq3pXEJp2TlkjnG+DkpfyLP3n+V+Sv9HNJjanmlnLoVhKuVCMUgequY1+vhYQ=="
+			]
+		},
+		"timestamp": "2021-10-04T06:13:53Z"
+	}
+}

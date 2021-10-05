@@ -1,0 +1,139 @@
+{
+    "header": {
+      "id": 5941763,
+      "chain_id": "cosmoshub-4",
+      "block_id": 11242749,
+      "timestamp": "2021-09-30T06:16:43Z"
+    },
+    "data": {
+      "height": "7840738",
+      "txhash": "ADDEB76AC7F570D5970219BE78D59369CB55F911B038845144D153BF053959C2",
+      "codespace": "",
+      "code": 0,
+      "data": "0A160A146465706F7369745F77697468696E5F6261746368",
+      "raw_log": "[{\"events\":[{\"type\":\"deposit_within_batch\",\"attributes\":[{\"key\":\"pool_id\",\"value\":\"5\"},{\"key\":\"batch_index\",\"value\":\"18697\"},{\"key\":\"msg_index\",\"value\":\"3298\"},{\"key\":\"deposit_coins\",\"value\":\"9000000ibc/2181AAB0218EAC24BC9F86BD1364FBBFA3E6E3FCC25E88E3E68C15DC6E752D86,863883uatom\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"deposit_within_batch\"},{\"key\":\"sender\",\"value\":\"cosmos1k6udtfc90k8h04aqdp2e69udd52z80lp82xns5\"},{\"key\":\"module\",\"value\":\"liquidity\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"cosmos1tx68a8k9yz54z06qfve9l2zxvgsz4ka3hr8962\"},{\"key\":\"sender\",\"value\":\"cosmos1k6udtfc90k8h04aqdp2e69udd52z80lp82xns5\"},{\"key\":\"amount\",\"value\":\"9000000ibc/2181AAB0218EAC24BC9F86BD1364FBBFA3E6E3FCC25E88E3E68C15DC6E752D86,863883uatom\"}]}]}]",
+      "logs": [
+        {
+          "msg_index": 0,
+          "log": "",
+          "events": [
+            {
+              "type": "deposit_within_batch",
+              "attributes": [
+                {
+                  "key": "pool_id",
+                  "value": "5"
+                },
+                {
+                  "key": "batch_index",
+                  "value": "18697"
+                },
+                {
+                  "key": "msg_index",
+                  "value": "3298"
+                },
+                {
+                  "key": "deposit_coins",
+                  "value": "9000000ibc/2181AAB0218EAC24BC9F86BD1364FBBFA3E6E3FCC25E88E3E68C15DC6E752D86,863883uatom"
+                }
+              ]
+            },
+            {
+              "type": "message",
+              "attributes": [
+                {
+                  "key": "action",
+                  "value": "deposit_within_batch"
+                },
+                {
+                  "key": "sender",
+                  "value": "cosmos1k6udtfc90k8h04aqdp2e69udd52z80lp82xns5"
+                },
+                {
+                  "key": "module",
+                  "value": "liquidity"
+                }
+              ]
+            },
+            {
+              "type": "transfer",
+              "attributes": [
+                {
+                  "key": "recipient",
+                  "value": "cosmos1tx68a8k9yz54z06qfve9l2zxvgsz4ka3hr8962"
+                },
+                {
+                  "key": "sender",
+                  "value": "cosmos1k6udtfc90k8h04aqdp2e69udd52z80lp82xns5"
+                },
+                {
+                  "key": "amount",
+                  "value": "9000000ibc/2181AAB0218EAC24BC9F86BD1364FBBFA3E6E3FCC25E88E3E68C15DC6E752D86,863883uatom"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "info": "",
+      "gas_wanted": "500000",
+      "gas_used": "100308",
+      "tx": {
+        "@type": "/cosmos.tx.v1beta1.Tx",
+        "body": {
+          "messages": [
+            {
+              "@type": "/tendermint.liquidity.v1beta1.MsgDepositWithinBatch",
+              "depositor_address": "cosmos1k6udtfc90k8h04aqdp2e69udd52z80lp82xns5",
+              "pool_id": "5",
+              "deposit_coins": [
+                {
+                  "denom": "ibc/2181AAB0218EAC24BC9F86BD1364FBBFA3E6E3FCC25E88E3E68C15DC6E752D86",
+                  "amount": "9000000"
+                },
+                {
+                  "denom": "uatom",
+                  "amount": "863883"
+                }
+              ]
+            }
+          ],
+          "memo": "",
+          "timeout_height": "0",
+          "extension_options": [],
+          "non_critical_extension_options": []
+        },
+        "auth_info": {
+          "signer_infos": [
+            {
+              "public_key": {
+                "@type": "/cosmos.crypto.secp256k1.PubKey",
+                "key": "Ai9jIxrJvMJ8noIlAaJ5QiV8CMytvwwzai3OxNQ9BLx+"
+              },
+              "mode_info": {
+                "single": {
+                  "mode": "SIGN_MODE_LEGACY_AMINO_JSON"
+                }
+              },
+              "sequence": "66"
+            }
+          ],
+          "fee": {
+            "amount": [
+              {
+                "denom": "uatom",
+                "amount": "12500"
+              }
+            ],
+            "gas_limit": "500000",
+            "payer": "",
+            "granter": ""
+          }
+        },
+        "signatures": [
+          "Kqbztn9/rW6mKiFqSkbXajsh+3ghb5CPhAAwG3Ak0Z80Lx+BijhyI6w8NEBILxSgvBwi8o0MvagZK93rtImYcA=="
+        ]
+      },
+      "timestamp": "2021-09-30T06:16:43Z"
+    }
+  }
