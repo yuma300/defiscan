@@ -1,158 +1,186 @@
 {
-    "header": {
-      "id": 2051032,
-      "chain_id": "cosmoshub-3",
-      "block_id": 6606383,
-      "timestamp": "2020-09-01T19:22:49Z"
-    },
-    "data": {
-      "height": "3204383",
-      "txhash": "42A96BF208814E93E5B40553E612E1E8991F68B5C833F60CC7046D48C8191363",
-      "raw_log": "[{\"msg_index\":0,\"success\":true,\"log\":\"\",\"events\":[{\"type\":\"delegate\",\"attributes\":[{\"key\":\"validator\",\"value\":\"cosmosvaloper12w6tynmjzq4l8zdla3v4x0jt8lt4rcz5gk7zg2\"},{\"key\":\"amount\",\"value\":\"15799646\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"sender\",\"value\":\"cosmos1jv65s3grqf6v6jl3dp4t6c9t9rk99cd88lyufl\"},{\"key\":\"module\",\"value\":\"staking\"},{\"key\":\"sender\",\"value\":\"cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7\"},{\"key\":\"action\",\"value\":\"delegate\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7\"},{\"key\":\"amount\",\"value\":\"16uatom\"}]}]}]",
-      "logs": [
-        {
-          "msg_index": 0,
-          "success": true,
-          "log": "",
-          "events": [
-            {
-              "type": "delegate",
-              "attributes": [
-                {
-                  "key": "validator",
-                  "value": "cosmosvaloper12w6tynmjzq4l8zdla3v4x0jt8lt4rcz5gk7zg2"
-                },
-                {
-                  "key": "amount",
-                  "value": "15799646"
-                }
-              ]
-            },
-            {
-              "type": "message",
-              "attributes": [
-                {
-                  "key": "sender",
-                  "value": "cosmos1jv65s3grqf6v6jl3dp4t6c9t9rk99cd88lyufl"
-                },
-                {
-                  "key": "module",
-                  "value": "staking"
-                },
-                {
-                  "key": "sender",
-                  "value": "cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7"
-                },
-                {
-                  "key": "action",
-                  "value": "delegate"
-                }
-              ]
-            },
-            {
-              "type": "transfer",
-              "attributes": [
-                {
-                  "key": "recipient",
-                  "value": "cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7"
-                },
-                {
-                  "key": "amount",
-                  "value": "16uatom"
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "gas_wanted": "200000",
-      "gas_used": "131977",
-      "tx": {
-        "type": "cosmos-sdk/StdTx",
-        "value": {
-          "msg": [
-            {
-              "type": "cosmos-sdk/MsgDelegate",
-              "value": {
-                "delegator_address": "cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7",
-                "validator_address": "cosmosvaloper12w6tynmjzq4l8zdla3v4x0jt8lt4rcz5gk7zg2",
-                "amount": {
-                  "denom": "uatom",
-                  "amount": "15799646"
-                }
-              }
-            }
-          ],
-          "fee": {
-            "amount": [
-              {
-                "denom": "uatom",
-                "amount": "5000"
-              }
-            ],
-            "gas": "200000"
-          },
-          "signatures": [
-            {
-              "pub_key": {
-                "type": "tendermint/PubKeySecp256k1",
-                "value": "A5nTl93uUtkqIyYj+D2YfaB1hd4EzeiemJrlPNqSA+Lj"
-              },
-              "signature": "g5x1+mJ/lqLEeLajM9BOfVeFNtwilcoewX7fjCZvIj9Xme0PKqcMoRaMMECHk6Xcg6c4lLXPG2/hyym9eSQ7Yg=="
-            }
-          ],
-          "memo": ""
-        }
-      },
-      "timestamp": "2020-09-01T19:22:49Z",
-      "events": [
-        {
-          "type": "delegate",
-          "attributes": [
-            {
-              "key": "validator",
-              "value": "cosmosvaloper12w6tynmjzq4l8zdla3v4x0jt8lt4rcz5gk7zg2"
-            },
-            {
-              "key": "amount",
-              "value": "15799646"
-            }
-          ]
-        },
-        {
-          "type": "message",
-          "attributes": [
-            {
-              "key": "sender",
-              "value": "cosmos1jv65s3grqf6v6jl3dp4t6c9t9rk99cd88lyufl"
-            },
-            {
-              "key": "module",
-              "value": "staking"
-            },
-            {
-              "key": "sender",
-              "value": "cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7"
-            },
-            {
-              "key": "action",
-              "value": "delegate"
-            }
-          ]
-        },
-        {
-          "type": "transfer",
-          "attributes": [
-            {
-              "key": "recipient",
-              "value": "cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7"
-            },
-            {
-              "key": "amount",
-              "value": "16uatom"
-            }
-          ]
-        }
-      ]
-    }
-  }
+	"header": {
+		"id": 1999828,
+		"chain_id": "cosmoshub-3",
+		"block_id": 6502900,
+		"timestamp": "2020-08-24T02:21:41Z"
+	},
+	"data": {
+		"height": "3100900",
+		"txhash": "F4D9C5B120A34DFCD7D848D5CB2A8589046C7B5505A21F2E5FB1DE3B1A54E577",
+		"code": 10,
+		"raw_log": "[{\"msg_index\":0,\"success\":true,\"log\":\"\",\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"sender\",\"value\":\"cosmos1jv65s3grqf6v6jl3dp4t6c9t9rk99cd88lyufl\"},{\"key\":\"module\",\"value\":\"distribution\"},{\"key\":\"sender\",\"value\":\"cosmos1y6yvdel7zys8x60gz9067fjpcpygsn62ae9x46\"},{\"key\":\"action\",\"value\":\"withdraw_delegator_reward\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"cosmos1y6yvdel7zys8x60gz9067fjpcpygsn62ae9x46\"},{\"key\":\"amount\",\"value\":\"49uatom\"}]},{\"type\":\"withdraw_rewards\",\"attributes\":[{\"key\":\"amount\",\"value\":\"49uatom\"},{\"key\":\"validator\",\"value\":\"cosmosvaloper12w6tynmjzq4l8zdla3v4x0jt8lt4rcz5gk7zg2\"}]}]},{\"msg_index\":1,\"success\":false,\"log\":\"{\\\"codespace\\\":\\\"sdk\\\",\\\"code\\\":10,\\\"message\\\":\\\"insufficient account funds; 198uatom \\u003c 397uatom\\\"}\",\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"delegate\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"success": true,
+				"log": "",
+				"events": [
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "sender",
+								"value": "cosmos1jv65s3grqf6v6jl3dp4t6c9t9rk99cd88lyufl"
+							},
+							{
+								"key": "module",
+								"value": "distribution"
+							},
+							{
+								"key": "sender",
+								"value": "cosmos1y6yvdel7zys8x60gz9067fjpcpygsn62ae9x46"
+							},
+							{
+								"key": "action",
+								"value": "withdraw_delegator_reward"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "cosmos1y6yvdel7zys8x60gz9067fjpcpygsn62ae9x46"
+							},
+							{
+								"key": "amount",
+								"value": "49uatom"
+							}
+						]
+					},
+					{
+						"type": "withdraw_rewards",
+						"attributes": [
+							{
+								"key": "amount",
+								"value": "49uatom"
+							},
+							{
+								"key": "validator",
+								"value": "cosmosvaloper12w6tynmjzq4l8zdla3v4x0jt8lt4rcz5gk7zg2"
+							}
+						]
+					}
+				]
+			},
+			{
+				"msg_index": 1,
+				"success": false,
+				"log": "{\"codespace\":\"sdk\",\"code\":10,\"message\":\"insufficient account funds; 198uatom < 397uatom\"}",
+				"events": [
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "delegate"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "300000",
+		"gas_used": "108412",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cosmos-sdk/MsgWithdrawDelegationReward",
+						"value": {
+							"delegator_address": "cosmos1y6yvdel7zys8x60gz9067fjpcpygsn62ae9x46",
+							"validator_address": "cosmosvaloper12w6tynmjzq4l8zdla3v4x0jt8lt4rcz5gk7zg2"
+						}
+					},
+					{
+						"type": "cosmos-sdk/MsgDelegate",
+						"value": {
+							"delegator_address": "cosmos1y6yvdel7zys8x60gz9067fjpcpygsn62ae9x46",
+							"validator_address": "cosmosvaloper12w6tynmjzq4l8zdla3v4x0jt8lt4rcz5gk7zg2",
+							"amount": {
+								"denom": "uatom",
+								"amount": "397"
+							}
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "uatom",
+							"amount": "0"
+						}
+					],
+					"gas": "300000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "A9E/2C2Tibu+oguuOS2AwO9sGwy1ejes+u8hBdGJ2gui"
+						},
+						"signature": "J377F2WLZHIW8JZvrh/wtH+8H18DWmqavP7cXGWmTEogMVssD1AZ+yNstVAoZ2j7qbQetLSbExKI2abbirRETA=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2020-08-24T02:21:41Z",
+		"events": [
+			{
+				"type": "message",
+				"attributes": [
+					{
+						"key": "sender",
+						"value": "cosmos1jv65s3grqf6v6jl3dp4t6c9t9rk99cd88lyufl"
+					},
+					{
+						"key": "module",
+						"value": "distribution"
+					},
+					{
+						"key": "sender",
+						"value": "cosmos1y6yvdel7zys8x60gz9067fjpcpygsn62ae9x46"
+					},
+					{
+						"key": "action",
+						"value": "withdraw_delegator_reward"
+					},
+					{
+						"key": "action",
+						"value": "delegate"
+					}
+				]
+			},
+			{
+				"type": "transfer",
+				"attributes": [
+					{
+						"key": "recipient",
+						"value": "cosmos1y6yvdel7zys8x60gz9067fjpcpygsn62ae9x46"
+					},
+					{
+						"key": "amount",
+						"value": "49uatom"
+					}
+				]
+			},
+			{
+				"type": "withdraw_rewards",
+				"attributes": [
+					{
+						"key": "amount",
+						"value": "49uatom"
+					},
+					{
+						"key": "validator",
+						"value": "cosmosvaloper12w6tynmjzq4l8zdla3v4x0jt8lt4rcz5gk7zg2"
+					}
+				]
+			}
+		]
+	}
+}

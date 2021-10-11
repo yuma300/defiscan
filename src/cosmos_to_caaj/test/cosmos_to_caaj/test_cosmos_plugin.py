@@ -1,9 +1,13 @@
 import unittest
-from test_message import *
+from unittest.mock import *
+from test.cosmos_to_caaj.test_config import *
+from test.cosmos_to_caaj.test_message import *
 import os
 from cosmos_to_caaj.cosmos_plugin import *
 import json
 from pathlib import Path
+
+TestConfig.set_root_logger(TestConfig.INFO)
 
 class TestCosmosPlugin(unittest.TestCase):
   """verify get_caaj works fine"""
@@ -42,28 +46,28 @@ class TestCosmosPlugin(unittest.TestCase):
     cosmos = CosmosPlugin()
     caajs = cosmos.get_caajs(v3_delegate, 'cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7')
 
-    caaj_delegate = caajs[0]
-    caaj_reward = caajs[1]
-  
-    self.assertEqual(caaj_delegate['time'], '2020-09-01 19:22:49')
-    self.assertEqual(caaj_delegate['debit_title'], 'STAKING')
-    self.assertEqual(caaj_delegate['debit_amount'], {'ATOM': '15.799646'})
-    self.assertEqual(caaj_delegate['debit_from'], 'cosmos_validator')
-    self.assertEqual(caaj_delegate['debit_to'], 'cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7')
-    self.assertEqual(caaj_delegate['credit_title'], 'SPOT')
-    self.assertEqual(caaj_delegate['credit_amount'], {'ATOM': '15.799646'})
-    self.assertEqual(caaj_delegate['credit_from'], 'cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7')
-    self.assertEqual(caaj_delegate['credit_to'], 'cosmos_validator')
+    caaj_reward = caajs[0]
+    caaj_delegate = caajs[1]
 
-    self.assertEqual(caaj_reward['time'], '2020-09-01 19:22:49')
+    self.assertEqual(caaj_reward['time'], '2020-08-24 02:21:41')
     self.assertEqual(caaj_reward['debit_title'], 'SPOT')
-    self.assertEqual(caaj_reward['debit_amount'], {'ATOM': '0.000016'})
+    self.assertEqual(caaj_reward['debit_amount'], {'ATOM': '0.000049'})
     self.assertEqual(caaj_reward['debit_from'], 'cosmos_staking_reward')
     self.assertEqual(caaj_reward['debit_to'], 'cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7')
     self.assertEqual(caaj_reward['credit_title'], 'STAKINGREWARD')
-    self.assertEqual(caaj_reward['credit_amount'], {'ATOM': '0.000016'})
+    self.assertEqual(caaj_reward['credit_amount'], {'ATOM': '0.000049'})
     self.assertEqual(caaj_reward['credit_from'], 'cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7')
     self.assertEqual(caaj_reward['credit_to'], 'cosmos_staking_reward')
+
+    self.assertEqual(caaj_delegate['time'], '2020-08-24 02:21:41')
+    self.assertEqual(caaj_delegate['debit_title'], 'STAKING')
+    self.assertEqual(caaj_delegate['debit_amount'], {'ATOM': '0.000397'})
+    self.assertEqual(caaj_delegate['debit_from'], 'cosmos_validator')
+    self.assertEqual(caaj_delegate['debit_to'], 'cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7')
+    self.assertEqual(caaj_delegate['credit_title'], 'SPOT')
+    self.assertEqual(caaj_delegate['credit_amount'], {'ATOM': '0.000397'})
+    self.assertEqual(caaj_delegate['credit_from'], 'cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7')
+    self.assertEqual(caaj_delegate['credit_to'], 'cosmos_validator')
 
   def test_begin_unbonding(self):
     v3_begin_unbonding = json.loads(Path('%s/../testdata/begin_unbonding_v3.json' % os.path.dirname(__file__)).read_text())
@@ -108,6 +112,22 @@ class TestCosmosPlugin(unittest.TestCase):
     self.assertEqual(caaj['credit_amount'], {'ATOM': '1'})
     self.assertEqual(caaj['credit_from'], 'cosmos10qcqwfqhgc833hw4e6gk2ajcs8nzjuu03yg3h7')
     self.assertEqual(caaj['credit_to'], 'cosmos1t5u0jfg3ljsjrh2m9e47d4ny2hea7eehxrzdgd')
+
+  def test_as_multisend(self):
+    v4_multisend = json.loads(Path('%s/../testdata/multisend_v4.json' % os.path.dirname(__file__)).read_text())
+    cosmos = CosmosPlugin()
+    caaj = cosmos.get_caajs(v4_multisend, 'cosmos144fzpepuvdftv4u4r9kq8t35ap2crruv4u3udz')[0]
+
+    self.assertEqual(caaj['time'], '2021-10-05 18:28:17')
+    self.assertEqual(caaj['debit_title'], 'SPOT')
+    self.assertEqual(caaj['debit_amount'], {'ATOM': '26.2707'})
+    self.assertEqual(caaj['debit_from'], 'cosmos1c5dsnqpa8xnuhz55t2xqjh0kn7xuc02q4uhda5')
+    self.assertEqual(caaj['debit_to'], 'cosmos144fzpepuvdftv4u4r9kq8t35ap2crruv4u3udz')
+    self.assertEqual(caaj['credit_title'], 'RECEIVE')
+    self.assertEqual(caaj['credit_amount'], {'ATOM': '26.2707'})
+    self.assertEqual(caaj['credit_from'], 'cosmos144fzpepuvdftv4u4r9kq8t35ap2crruv4u3udz')
+    self.assertEqual(caaj['credit_to'], 'cosmos1c5dsnqpa8xnuhz55t2xqjh0kn7xuc02q4uhda5')
+
 
   def test_as_swap_within_batch(self):
     v4_swap_within_batch = json.loads(Path('%s/../testdata/swap_within_batch_v4.json' % os.path.dirname(__file__)).read_text())
