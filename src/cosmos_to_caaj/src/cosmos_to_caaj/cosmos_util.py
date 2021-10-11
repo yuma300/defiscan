@@ -1,6 +1,11 @@
 from decimal import *
 import re
 from typing import Union
+import logging
+
+logger = logging.getLogger(name=__name__)
+logger.addHandler(logging.NullHandler())
+getcontext().prec = 50
 
 class CosmosUtil:
   @classmethod

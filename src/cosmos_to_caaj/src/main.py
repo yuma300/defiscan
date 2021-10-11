@@ -15,11 +15,14 @@ logger.addHandler(logging.NullHandler())
 getcontext().prec = 50
 
 def set_root_logger():
-  root_logget = logging.getLogger(name=None)
-  root_logget.setLevel(logging.INFO)
-  stream_handler = logging.StreamHandler()
-  stream_handler.setLevel(logging.INFO)
-  root_logget.addHandler(stream_handler)
+    root_logger = logging.getLogger(name=None)
+    root_logger.setLevel(logging.INFO)
+    if not root_logger.hasHandlers():
+      fmt = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", "%Y-%m-%dT%H:%M:%S")
+      stream_handler = logging.StreamHandler()
+      stream_handler.setLevel(logging.INFO)
+      stream_handler.setFormatter(fmt)
+      root_logger.addHandler(stream_handler)
 
 def output_caaj(caajs, address):
   df = pd.DataFrame(caajs)
@@ -30,7 +33,7 @@ def output_caaj(caajs, address):
 def main():
   cosmos = CosmosPlugin()
   caajs = []
-  print('hjoge')
+  print('start cosmos_to_caaj')
   
   address = sys.argv[1]
   num_transactions = 50 

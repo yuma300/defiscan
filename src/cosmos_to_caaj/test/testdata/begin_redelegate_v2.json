@@ -1,0 +1,84 @@
+{
+	"header": {
+		"id": 222897,
+		"chain_id": "cosmoshub-2",
+		"block_id": 1238771,
+		"timestamp": "2019-06-20T14:06:15Z"
+	},
+	"data": {
+		"height": "738771",
+		"txhash": "F3C0972B35740B1F6ACB26BCBE9B4CCDD309B253240B1EF253501392D1E5CDD1",
+		"data": "0C08D7849DE905109691809F01",
+		"raw_log": "[{\"msg_index\":\"0\",\"success\":true,\"log\":\"\"}]",
+		"logs": [
+			{
+				"msg_index": "0",
+				"success": true,
+				"log": ""
+			}
+		],
+		"gas_wanted": "212109",
+		"gas_used": "144979",
+		"tags": [
+			{
+				"key": "action",
+				"value": "begin_redelegate"
+			},
+			{
+				"key": "delegator",
+				"value": "cosmos13lmdadasda4dafdasfsfgh54hdshfs3fsfsdvg"
+			},
+			{
+				"key": "source-validator",
+				"value": "cosmosvaloper1grgelyng2v6v3t8z87wu3sxgt9m5s03xfytvz7"
+			},
+			{
+				"key": "destination-validator",
+				"value": "cosmosvaloper1ey69r37gfxvxg62sh4r0ktpuc46pzjrm873ae8"
+			},
+			{
+				"key": "end-time",
+				"value": "2019-07-11T14:06:15Z"
+			}
+		],
+		"tx": {
+			"type": "auth/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cosmos-sdk/MsgBeginRedelegate",
+						"value": {
+							"delegator_address": "cosmos13lmdadasda4dafdasfsfgh54hdshfs3fsfsdvg",
+							"validator_src_address": "cosmosvaloper1grgelyng2v6v3t8z87wu3sxgt9m5s03xfytvz7",
+							"validator_dst_address": "cosmosvaloper1ey69r37gfxvxg62sh4r0ktpuc46pzjrm873ae8",
+							"amount": {
+								"denom": "uatom",
+								"amount": "23000000"
+							}
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "uatom",
+							"amount": "5303"
+						}
+					],
+					"gas": "212109"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "AnHSCeOlASVgPgrCIWg8YA0HhZhpcV+bN+gKB5EXU6c6"
+						},
+						"signature": "sUcP4GjAmzjvPve3EFTfD0goMWE3O4jHSZbLxB1yWQlhEuEnTV69+Veft0eEzgI965EoW+6VQ6CWWLEI+q9dpA=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2019-06-20T14:06:15Z"
+	}
+}

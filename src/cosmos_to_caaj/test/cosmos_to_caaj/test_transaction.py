@@ -7,13 +7,6 @@ from pathlib import Path
 
 class TestTransaction(unittest.TestCase):
   """verify get_caaj works fine"""
-  def test_get_messages(self):
-    multimessages_transaction = json.loads(Path('%s/../testdata/multimessages_v4.json' % os.path.dirname(__file__)).read_text())
-    transaction = Transaction(multimessages_transaction)    
-    messages = transaction.get_messages()
-    self.assertEqual(messages[0].events[0]['type'], 'message')
-    self.assertEqual(messages[1].events[0]['type'], 'denomination_trace')
-
   def test_get_transaction_id(self):
     v4_success_transaction = json.loads(Path('%s/../testdata/withdraw_delegator_reward_v4.json' % os.path.dirname(__file__)).read_text())
     transaction = Transaction(v4_success_transaction)

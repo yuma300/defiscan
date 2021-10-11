@@ -2,19 +2,14 @@ import logging
 from caaj_plugin.caaj_plugin import *
 from cosmos_to_caaj.block import *
 from cosmos_to_caaj.transaction import *
+from cosmos_to_caaj.message import *
+from cosmos_to_caaj.message_factory import *
 from decimal import *
 from datetime import datetime as dt
 
 logger = logging.getLogger(name=__name__)
 logger.addHandler(logging.NullHandler())
 getcontext().prec = 50
-
-def set_root_logger():
-  root_logget = logging.getLogger(name=None)
-  root_logget.setLevel(logging.INFO)
-  stream_handler = logging.StreamHandler()
-  stream_handler.setLevel(logging.INFO)
-  root_logget.addHandler(stream_handler)
 
 class CosmosPlugin(CaajPlugin):
   PLATFORM = 'cosmos'
@@ -30,14 +25,16 @@ class CosmosPlugin(CaajPlugin):
 
     return True
 
-  def get_caajs(self, transaction, subject_address):
+  def get_caajs(self, transaction_json:json, subject_address:str):
     caajs = []
-    transaction = Transaction(transaction)
-    messages = transaction.get_messages()
-    print(transaction.get_transaction_id())
+    transaction = Transaction(transaction_json)
+    logger.info(json.dumps(transaction.get_transaction_id()))
+    messages = MessageFactory.get_messages(transaction_json) if transaction.get_fail() == False else []
+
     for message in messages:
       try:
         result = message.get_result()
+        logger.debug(result)
       except Exception as e:
         logger.info('message.get_result() is failed. transaction:')        
         logger.info(json.dumps(transaction.transaction))
@@ -52,6 +49,8 @@ class CosmosPlugin(CaajPlugin):
         caajs.extend(CosmosPlugin.__as_begin_unbonding(transaction, result['result'], subject_address))
       elif result['action'] == 'send':
         caajs.extend(CosmosPlugin.__as_send(transaction, result['result'], subject_address))
+      elif result['action'] == 'multisend':
+        caajs.extend(CosmosPlugin.__as_multisend(transaction, result['result'], subject_address))
       elif result['action'] == 'swap_within_batch':
         caajs.extend(CosmosPlugin.__as_swap_within_batch(transaction, result['result'], subject_address))
       elif result['action'] == 'deposit_within_batch':
@@ -64,12 +63,13 @@ class CosmosPlugin(CaajPlugin):
         pass
       elif result['action'] == 'recv_packet':
         caajs.extend(CosmosPlugin.__as_send(transaction, result['result'], subject_address))
+      elif result['action'] == 'acknowledge_packet':
+        pass
       elif result['action'] == 'vote':
         pass
       else:
-        logger.info(json.dumps('undefined action in CosmosPlugin'))
-        logger.info(json.dumps(transaction.transaction))
-
+        logger.error(json.dumps('undefined action in CosmosPlugin'))
+        logger.error(json.dumps(transaction.transaction))
 
     fee = transaction.get_fee()
     caajs.extend(CosmosPlugin.__as_transaction_fee(transaction, fee, subject_address))
@@ -130,7 +130,7 @@ class CosmosPlugin(CaajPlugin):
         'comment':        f'staking {result["staking_amount"]} {result["staking_coin"]}'
       })
     # try to find delegate reward
-    if Decimal(result['reward_amount']) != Decimal('0'):
+    if 'reward_amount' in result and Decimal(result['reward_amount']) != Decimal('0'):
       caajs.append({
         'time':           transacton.get_time(),
         'platform':       CosmosPlugin.PLATFORM,
@@ -187,8 +187,8 @@ class CosmosPlugin(CaajPlugin):
     sender = result['sender']
 
     if subject_address not in [recipient, sender]:
-      raise ValueError(f'subject_address not in recipient and sender. transaction:{transaction["data"]["txhash"]}')
-    if subject_address == recipient:
+      caajs = []
+    elif subject_address == recipient:
       caajs = [{
         'time':           transaction.get_time(),
         'platform':       CosmosPlugin.PLATFORM,
@@ -218,6 +218,54 @@ class CosmosPlugin(CaajPlugin):
         'credit_to':      recipient,
         'comment':        f'{sender} send {result["amount"]} {result["coin"]} to {recipient}'
       }]
+
+    return caajs
+
+  @classmethod
+  def __as_multisend(cls, transaction:Transaction, result, subject_address:str):
+    recipients = result['recipients']
+    senders = result['senders']
+    if len(senders) > 1:
+      raise ValueError('irregular multisend transaction. sender exist more than 2')
+    sender = senders[0]
+
+    caajs = []
+    if subject_address == sender['address']:
+      coin = sender['coins'][0]['denom']
+      amount = sender['coins'][0]['amount']
+      recipients_list = list(map(lambda x: x['address'], recipients))
+      caajs.append({
+        'time':           transaction.get_time(),
+        'platform':       CosmosPlugin.PLATFORM,
+        'transaction_id': transaction.get_transaction_id(),
+        'debit_title':    'SEND',
+        'debit_amount':   {coin: amount},
+        'debit_from':     subject_address,
+        'debit_to':       recipients_list,
+        'credit_title':   'SPOT',
+        'credit_amount':  {coin: amount},
+        'credit_from':    recipients_list,
+        'credit_to':      subject_address,
+        'comment':        f'{subject_address} send {amount} {coin} to {recipients_list}'
+      })      
+    for recipient in recipients:
+      if recipient['address'] == subject_address:
+        coin = recipient['coins'][0]['denom']
+        amount = recipient['coins'][0]['amount']
+        caajs.append({
+          'time':           transaction.get_time(),
+          'platform':       CosmosPlugin.PLATFORM,
+          'transaction_id': transaction.get_transaction_id(),
+          'debit_title':    'SPOT',
+          'debit_amount':   {coin: amount},
+          'debit_from':     sender['address'],
+          'debit_to':       subject_address,
+          'credit_title':   'RECEIVE',
+          'credit_amount':  {coin: amount},
+          'credit_from':    subject_address,
+          'credit_to':      sender['address'],
+          'comment':        f'{subject_address} receive {amount} {coin} from {sender["address"]}'
+        })
 
     return caajs
 

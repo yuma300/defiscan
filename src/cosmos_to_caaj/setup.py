@@ -2,9 +2,14 @@
 
 from setuptools import setup, find_packages
 from glob import glob
+from os.path import splitext
+from os.path import basename
+import sys
 
 def _requires_from_file(filename):
     return open(filename).read().splitlines()
+
+sys.path.append("test/cosmos_to_caaj")
 
 setup(
     name='cosmos_to_caaj',
@@ -20,5 +25,6 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
     include_package_data=True,
-    py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')]
+    py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
+    test_suite = 'test'
 )

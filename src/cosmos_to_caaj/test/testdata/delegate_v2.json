@@ -1,0 +1,102 @@
+{
+	"header": {
+		"id": 682839,
+		"chain_id": "cosmoshub-2",
+		"block_id": 3401945,
+		"timestamp": "2019-12-11T15:04:32Z"
+	},
+	"data": {
+		"height": "2901945",
+		"txhash": "31BAF9EE81CD22E29D79198257F92EBA0B34E33A6935EFB58216EE3C03063FF0",
+		"raw_log": "[{\"msg_index\":\"0\",\"success\":true,\"log\":\"\"},{\"msg_index\":\"1\",\"success\":true,\"log\":\"\"}]",
+		"logs": [
+			{
+				"msg_index": "0",
+				"success": true,
+				"log": ""
+			},
+			{
+				"msg_index": "0",
+				"success": true,
+				"log": ""
+			}
+		],
+		"gas_wanted": "230000",
+		"gas_used": "147642",
+		"tags": [
+			{
+				"key": "action",
+				"value": "withdraw_delegator_reward"
+			},
+			{
+				"key": "rewards",
+				"value": "131941uatom"
+			},
+			{
+				"key": "delegator",
+				"value": "cosmos1ujgvj5rtfm05609xc6gmzd4q8ydmuy3smtwn29"
+			},
+			{
+				"key": "source-validator",
+				"value": "cosmosvaloper1rwh0cxa72d3yle3r4l8gd7vyphrmjy2kpe4x72"
+			},
+			{
+				"key": "action",
+				"value": "delegate"
+			},
+			{
+				"key": "delegator",
+				"value": "cosmos1ujgvj5rtfm05609xc6gmzd4q8ydmuy3smtwn29"
+			},
+			{
+				"key": "destination-validator",
+				"value": "cosmosvaloper1rwh0cxa72d3yle3r4l8gd7vyphrmjy2kpe4x72"
+			}
+		],
+		"tx": {
+			"type": "auth/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cosmos-sdk/MsgWithdrawDelegationReward",
+						"value": {
+							"delegator_address": "cosmos1ujgvj5rtfm05609xc6gmzd4q8ydmuy3smtwn29",
+							"validator_address": "cosmosvaloper1rwh0cxa72d3yle3r4l8gd7vyphrmjy2kpe4x72"
+						}
+					},
+					{
+						"type": "cosmos-sdk/MsgDelegate",
+						"value": {
+							"delegator_address": "cosmos1ujgvj5rtfm05609xc6gmzd4q8ydmuy3smtwn29",
+							"validator_address": "cosmosvaloper1rwh0cxa72d3yle3r4l8gd7vyphrmjy2kpe4x72",
+							"amount": {
+								"denom": "uatom",
+								"amount": "131830"
+							}
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "uatom",
+							"amount": "690"
+						}
+					],
+					"gas": "230000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "A3Q/BNxcXAI/5pbnV970HzKlORFCsajNiPzNnnZe7lwp"
+						},
+						"signature": "1Ptj/72lX5derIM1SsIx1pbHZ6G7Sp9Rrm3Ez80sb5FoTbEEp6QviOLhm5XGmniBO37ROjkxxklHmlMmUTPuDw=="
+					}
+				],
+				"memo": "Reinvest rewards from imToken"
+			}
+		},
+		"timestamp": "2019-12-11T15:04:32Z"
+	}
+}

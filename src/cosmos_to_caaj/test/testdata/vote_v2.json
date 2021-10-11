@@ -1,0 +1,71 @@
+{
+	"header": {
+		"id": 67880,
+		"chain_id": "cosmoshub-2",
+		"block_id": 673552,
+		"timestamp": "2019-05-06T11:05:37Z"
+	},
+	"data": {
+		"height": "173552",
+		"txhash": "6F8E4F1C9A2C64A37F604848A2F47C5A945EE667F2092D6EB8E844C64462E1AF",
+		"raw_log": "[{\"msg_index\":\"0\",\"success\":true,\"log\":\"\"}]",
+		"logs": [
+			{
+				"msg_index": "0",
+				"success": true,
+				"log": ""
+			}
+		],
+		"gas_wanted": "19939",
+		"gas_used": "16826",
+		"tags": [
+			{
+				"key": "action",
+				"value": "vote"
+			},
+			{
+				"key": "voter",
+				"value": "cosmos13ldfv5yl4rtvvgbfytszwfvde4ymfzdfgbhyun"
+			},
+			{
+				"key": "proposal-id",
+				"value": "7"
+			}
+		],
+		"tx": {
+			"type": "auth/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cosmos-sdk/MsgVote",
+						"value": {
+							"proposal_id": "7",
+							"voter": "cosmos13ldfv5yl4rtvvgbfytszwfvde4ymfzdfgbhyun",
+							"option": "Yes"
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "uatom",
+							"amount": "499"
+						}
+					],
+					"gas": "19939"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "AnHSCeOlASVgPgrCIWg8YA0HhZhpcV+bN+gKB5EXU6c6"
+						},
+						"signature": "7LwD+EYAzhR62Eshh+LqUe7NGEe88XTXgPFDUtoqQ4tSBAQ2SNgUQFg2azroBGxgKfX8VmpEZ1uz1Am8a/DgVQ=="
+					}
+				],
+				"memo": "(Sent via Lunie)"
+			}
+		},
+		"timestamp": "2019-05-06T11:05:37Z"
+	}
+}
