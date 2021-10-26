@@ -1,0 +1,116 @@
+{
+	"header": {
+		"id": 1432513,
+		"chain_id": "kava-6",
+		"block_id": 5740515,
+		"timestamp": "2021-04-06T23:00:17Z"
+	},
+	"data": {
+		"height": "321330",
+		"txhash": "C027244153F6ECB58D2786C307EB32514ACDEA1729F13B1310BA2E6A1D15BFB",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"refundAtomicSwap\"},{\"key\":\"sender\",\"value\":\"kava1eyugkwc74zejgwdwl7mvm7pad4hzdnka4wmdmu\"},{\"key\":\"module\",\"value\":\"bep3\"},{\"key\":\"sender\",\"value\":\"kava1dfg9r2n12m9abhet34k3xtju9vbndkuieqlojg\"}]},{\"type\":\"refund_atomic_swap\",\"attributes\":[{\"key\":\"refund_sender\",\"value\":\"kava1dfg9r2n12m9abhet34k3xtju9vbndkuieqlojg\"},{\"key\":\"sender\",\"value\":\"kava1dfg9r2n12m9abhet34k3xtju9vbndkuieqlojg\"},{\"key\":\"atomic_swap_id\",\"value\":\"3e8cbc40411e18487dfa9b4bc06e325b06362140bed7e64004409f910740507b\"},{\"key\":\"random_number_hash\",\"value\":\"c620e4086a1f673425fd58250dbdd3894a9bdbfd8b16298d43b80f9892ed3363\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1dfg9r2n12m9abhet34k3xtju9vbndkuieqlojg\"},{\"key\":\"sender\",\"value\":\"kava1eyugkwc74zejgwdwl7mvm7pad4hzdnka4wmdmu\"},{\"key\":\"amount\",\"value\":\"50000000000bnb\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "refundAtomicSwap"
+							},
+							{
+								"key": "sender",
+								"value": "kava1eyugkwc74zejgwdwl7mvm7pad4hzdnka4wmdmu"
+							},
+							{
+								"key": "module",
+								"value": "bep3"
+							},
+							{
+								"key": "sender",
+								"value": "kava1dfg9r2n12m9abhet34k3xtju9vbndkuieqlojg"
+							}
+						]
+					},
+					{
+						"type": "refund_atomic_swap",
+						"attributes": [
+							{
+								"key": "refund_sender",
+								"value": "kava1dfg9r2n12m9abhet34k3xtju9vbndkuieqlojg"
+							},
+							{
+								"key": "sender",
+								"value": "kava1dfg9r2n12m9abhet34k3xtju9vbndkuieqlojg"
+							},
+							{
+								"key": "atomic_swap_id",
+								"value": "3e8cbc40411e18487dfa9b4bc06e325b06362140bed7e64004409f910740507b"
+							},
+							{
+								"key": "random_number_hash",
+								"value": "c620e4086a1f673425fd58250dbdd3894a9bdbfd8b16298d43b80f9892ed3363"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1dfg9r2n12m9abhet34k3xtju9vbndkuieqlojg"
+							},
+							{
+								"key": "sender",
+								"value": "kava1eyugkwc74zejgwdwl7mvm7pad4hzdnka4wmdmu"
+							},
+							{
+								"key": "amount",
+								"value": "50000000000bnb"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "300000",
+		"gas_used": "140287",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "bep3/MsgRefundAtomicSwap",
+						"value": {
+							"from": "kava1dfg9r2n12m9abhet34k3xtju9vbndkuieqlojg",
+							"swap_id": "3E8CBC40411E18487DFA9B4BC06E325B06362140BED7E64004409F910740507B"
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "ukava",
+							"amount": "0"
+						}
+					],
+					"gas": "300000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "A8Jl+LZZQfQBjAnH9i7VbUB/BfY6azZUDHlwYC9ka94K"
+						},
+						"signature": "Vx0kCU7iLZG8rMCrQInGCcnCyhwPX1ToXjCGAhca5RgOIb1QBB7pxZb2jy0GVrx76qFUtLHCc10HmHL8WMVznQ=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-04-06T23:00:17Z"
+	}
+}

@@ -1,0 +1,144 @@
+{
+	"header": {
+		"id": 2945775,
+		"chain_id": "kava-8",
+		"block_id": 7918270,
+		"timestamp": "2021-09-22T07:08:13Z"
+	},
+	"data": {
+		"height": "285632",
+		"txhash": "8ACAFD81B28D6BE5630EBC22AD4A382DAB54DD63BF4D86F873F1DC27D9EF0039",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"swap_for_exact_tokens\"},{\"key\":\"sender\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"},{\"key\":\"sender\",\"value\":\"kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu\"},{\"key\":\"module\",\"value\":\"swap\"},{\"key\":\"sender\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"}]},{\"type\":\"swap_trade\",\"attributes\":[{\"key\":\"pool_id\",\"value\":\"busd:usdx\"},{\"key\":\"requester\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"},{\"key\":\"input\",\"value\":\"1398792220598busd\"},{\"key\":\"output\",\"value\":\"14238680000usdx\"},{\"key\":\"fee\",\"value\":\"2098188331busd\"},{\"key\":\"exact\",\"value\":\"output\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu\"},{\"key\":\"sender\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"},{\"key\":\"amount\",\"value\":\"1398792220598busd\"},{\"key\":\"recipient\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"},{\"key\":\"sender\",\"value\":\"kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu\"},{\"key\":\"amount\",\"value\":\"14238680000usdx\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "swap_for_exact_tokens"
+							},
+							{
+								"key": "sender",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							},
+							{
+								"key": "sender",
+								"value": "kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu"
+							},
+							{
+								"key": "module",
+								"value": "swap"
+							},
+							{
+								"key": "sender",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							}
+						]
+					},
+					{
+						"type": "swap_trade",
+						"attributes": [
+							{
+								"key": "pool_id",
+								"value": "busd:usdx"
+							},
+							{
+								"key": "requester",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							},
+							{
+								"key": "input",
+								"value": "1398792220598busd"
+							},
+							{
+								"key": "output",
+								"value": "14238680000usdx"
+							},
+							{
+								"key": "fee",
+								"value": "2098188331busd"
+							},
+							{
+								"key": "exact",
+								"value": "output"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu"
+							},
+							{
+								"key": "sender",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							},
+							{
+								"key": "amount",
+								"value": "1398792220598busd"
+							},
+							{
+								"key": "recipient",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							},
+							{
+								"key": "sender",
+								"value": "kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu"
+							},
+							{
+								"key": "amount",
+								"value": "14238680000usdx"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "1000000",
+		"gas_used": "222366",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "swap/MsgSwapForExactTokens",
+						"value": {
+							"requester": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0",
+							"token_a": {
+								"denom": "busd",
+								"amount": "1398792220598"
+							},
+							"exact_token_b": {
+								"denom": "usdx",
+								"amount": "14238680000"
+							},
+							"slippage": "0.010000000000000000",
+							"deadline": "1632294776"
+						}
+					}
+				],
+				"fee": {
+					"amount": [],
+					"gas": "1000000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "Ai0LYc99PazJTnef1wqBjeafEVxfdJHCOnInMQb2kHzE"
+						},
+						"signature": "eVuEEiNAqeG7eOyUGf7NO9RZr2qo6C3017k5b+ruyItKV+zlLvrfuRjhxTT5kYGTjTYxdvcS/EriLa23T5NPfA=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-09-22T07:08:13Z"
+	}
+}

@@ -1,0 +1,121 @@
+{
+	"header": {
+		"id": 17131,
+		"chain_id": "kava-2",
+		"block_id": 1728918,
+		"timestamp": "2020-04-01T07:40:01Z"
+	},
+	"data": {
+		"height": "1728918",
+		"txhash": "A7C892540487D8E488338F84F9C48A6FAC60870A0E609CB6E5F5907B6DF78636",
+		"raw_log": "[{\"msg_index\":0,\"success\":true,\"log\":\"\",\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"send\"},{\"key\":\"sender\",\"value\":\"kava1k760ypy9tzhp6l2rmg06sq4n74z0d3relc549c\"},{\"key\":\"module\",\"value\":\"bank\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1nzq60hrphyr8anvkw6fv93mhafew7ez4tq9ahv\"},{\"key\":\"amount\",\"value\":\"13500000ukava\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"success": true,
+				"log": "",
+				"events": [
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "send"
+							},
+							{
+								"key": "sender",
+								"value": "kava1k760ypy9tzhp6l2rmg06sq4n74z0d3relc549c"
+							},
+							{
+								"key": "module",
+								"value": "bank"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1nzq60hrphyr8anvkw6fv93mhafew7ez4tq9ahv"
+							},
+							{
+								"key": "amount",
+								"value": "13500000ukava"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "200000",
+		"gas_used": "54297",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cosmos-sdk/MsgSend",
+						"value": {
+							"from_address": "kava1k760ypy9tzhp6l2rmg06sq4n74z0d3relc549c",
+							"to_address": "kava1nzq60hrphyr8anvkw6fv93mhafew7ez4tq9ahv",
+							"amount": [
+								{
+									"denom": "ukava",
+									"amount": "13500000"
+								}
+							]
+						}
+					}
+				],
+				"fee": {
+					"amount": [],
+					"gas": "200000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "AwwWsKFmVZPDMpimRPEBflg5+NF5VHc22SzCP4+ojUby"
+						},
+						"signature": "hnxrH6zo/wZ9UK8OPuR8Px4Ojl9OJNLN24CItKYHxfdtZ4rsO0h2jJ/6B280pxOQpqSGyD58+VcbPyYpXBN9zg=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2020-04-01T07:40:01Z",
+		"events": [
+			{
+				"type": "message",
+				"attributes": [
+					{
+						"key": "action",
+						"value": "send"
+					},
+					{
+						"key": "sender",
+						"value": "kava1k760ypy9tzhp6l2rmg06sq4n74z0d3relc549c"
+					},
+					{
+						"key": "module",
+						"value": "bank"
+					}
+				]
+			},
+			{
+				"type": "transfer",
+				"attributes": [
+					{
+						"key": "recipient",
+						"value": "kava1nzq60hrphyr8anvkw6fv93mhafew7ez4tq9ahv"
+					},
+					{
+						"key": "amount",
+						"value": "13500000ukava"
+					}
+				]
+			}
+		]
+	}
+}

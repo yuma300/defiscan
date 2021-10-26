@@ -1,0 +1,118 @@
+{
+	"header": {
+		"id": 1238840,
+		"chain_id": "kava-4",
+		"block_id": 5383805,
+		"timestamp": "2021-02-28T03:47:38Z"
+	},
+	"data": {
+		"height": "1231950",
+		"txhash": "FE2235FD5CE5B962C8975E0D8E4180CD1A9A5A56C161E4940EB144B9A7752514",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"claim_harvest_reward\",\"attributes\":[{\"key\":\"amount\",\"value\":\"23994390hard\"},{\"key\":\"claim_holder\",\"value\":\"kava12f45zhguupp5jaa622rpp3n5jyejc4jc3dd5sq\"},{\"key\":\"deposit_denom\",\"value\":\"hard\"},{\"key\":\"deposit_type\",\"value\":\"lp\"},{\"key\":\"claim_multiplier\",\"value\":\"large\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"claim_harvest_reward\"},{\"key\":\"sender\",\"value\":\"kava1nzenvfcapyjr9qe3cr3c5k2aucssg6wnknlvll\"},{\"key\":\"module\",\"value\":\"harvest\"},{\"key\":\"sender\",\"value\":\"kava12f45zhguupp5jaa622rpp3n5jyejc4jc3dd5sq\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava12f45zhguupp5jaa622rpp3n5jyejc4jc3dd5sq\"},{\"key\":\"sender\",\"value\":\"kava1nzenvfcapyjr9qe3cr3c5k2aucssg6wnknlvll\"},{\"key\":\"amount\",\"value\":\"23994390hard\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "claim_harvest_reward",
+						"attributes": [
+							{
+								"key": "amount",
+								"value": "23994390hard"
+							},
+							{
+								"key": "claim_holder",
+								"value": "kava12f45zhguupp5jaa622rpp3n5jyejc4jc3dd5sq"
+							},
+							{
+								"key": "deposit_denom",
+								"value": "hard"
+							},
+							{
+								"key": "deposit_type",
+								"value": "lp"
+							},
+							{
+								"key": "claim_multiplier",
+								"value": "large"
+							}
+						]
+					},
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "claim_harvest_reward"
+							},
+							{
+								"key": "sender",
+								"value": "kava1nzenvfcapyjr9qe3cr3c5k2aucssg6wnknlvll"
+							},
+							{
+								"key": "module",
+								"value": "harvest"
+							},
+							{
+								"key": "sender",
+								"value": "kava12f45zhguupp5jaa622rpp3n5jyejc4jc3dd5sq"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava12f45zhguupp5jaa622rpp3n5jyejc4jc3dd5sq"
+							},
+							{
+								"key": "sender",
+								"value": "kava1nzenvfcapyjr9qe3cr3c5k2aucssg6wnknlvll"
+							},
+							{
+								"key": "amount",
+								"value": "23994390hard"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "650000",
+		"gas_used": "102435",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "harvest/MsgClaimReward",
+						"value": {
+							"sender": "kava12f45zhguupp5jaa622rpp3n5jyejc4jc3dd5sq",
+							"receiver": "kava12f45zhguupp5jaa622rpp3n5jyejc4jc3dd5sq",
+							"deposit_denom": "hard",
+							"multiplier_name": "large",
+							"deposit_type": "lp"
+						}
+					}
+				],
+				"fee": {
+					"amount": [],
+					"gas": "650000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "A/Rq6VSfugIApg0k579y7Enfq5GBMx2TqLpvFBc22Avg"
+						},
+						"signature": "lAtcXQ9NawfAJ4BHhPO893Ugd9phidKqFu5zpyHqHnsOl5RCWBKsnjcGvLhDPycGnj6bICMvnpSLea7widZawg=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-02-28T03:47:38Z"
+	}
+}

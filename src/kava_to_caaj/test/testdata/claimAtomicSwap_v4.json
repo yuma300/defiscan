@@ -1,0 +1,121 @@
+{
+	"header": {
+		"id": 594072,
+		"chain_id": "kava-4",
+		"block_id": 4437803,
+		"timestamp": "2020-11-10T13:42:52Z"
+	},
+	"data": {
+		"height": "285948",
+		"txhash": "CCAC9B017C7704383CBA089C071798BE38233DEE59C7D75BF8AB2432F5F42363",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"claim_atomic_swap\",\"attributes\":[{\"key\":\"claim_sender\",\"value\":\"kava1nzq60hrphyr8anvkw6fv93mhafew7ez4tq9ahv\"},{\"key\":\"recipient\",\"value\":\"kava1nzq60hrphyr8anvkw6fv93mhafew7ez4tq9ahv\"},{\"key\":\"atomic_swap_id\",\"value\":\"79e36acbd5ad7c810374e0a1d2875036fafaa9c4bf0b984567c7736ca9f54da4\"},{\"key\":\"random_number_hash\",\"value\":\"f6508ea98db6c1946d708272ccf85747fc0fad1d59cf40696d5122126b5df932\"},{\"key\":\"random_number\",\"value\":\"ac07393b84c63689f283185453ad4c671b62f510d7939ac4110315cdd6ec251e\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"claimAtomicSwap\"},{\"key\":\"sender\",\"value\":\"kava1eyugkwc74zejgwdwl7mvm7pad4hzdnka4wmdmu\"},{\"key\":\"module\",\"value\":\"bep3\"},{\"key\":\"sender\",\"value\":\"kava1nzq60hrphyr8anvkw6fv93mhafew7ez4tq9ahv\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1nzq60hrphyr8anvkw6fv93mhafew7ez4tq9ahv\"},{\"key\":\"sender\",\"value\":\"kava1eyugkwc74zejgwdwl7mvm7pad4hzdnka4wmdmu\"},{\"key\":\"amount\",\"value\":\"9988900000xrpb\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "claim_atomic_swap",
+						"attributes": [
+							{
+								"key": "claim_sender",
+								"value": "kava1nzq60hrphyr8anvkw6fv93mhafew7ez4tq9ahv"
+							},
+							{
+								"key": "recipient",
+								"value": "kava1nzq60hrphyr8anvkw6fv93mhafew7ez4tq9ahv"
+							},
+							{
+								"key": "atomic_swap_id",
+								"value": "79e36acbd5ad7c810374e0a1d2875036fafaa9c4bf0b984567c7736ca9f54da4"
+							},
+							{
+								"key": "random_number_hash",
+								"value": "f6508ea98db6c1946d708272ccf85747fc0fad1d59cf40696d5122126b5df932"
+							},
+							{
+								"key": "random_number",
+								"value": "ac07393b84c63689f283185453ad4c671b62f510d7939ac4110315cdd6ec251e"
+							}
+						]
+					},
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "claimAtomicSwap"
+							},
+							{
+								"key": "sender",
+								"value": "kava1eyugkwc74zejgwdwl7mvm7pad4hzdnka4wmdmu"
+							},
+							{
+								"key": "module",
+								"value": "bep3"
+							},
+							{
+								"key": "sender",
+								"value": "kava1nzq60hrphyr8anvkw6fv93mhafew7ez4tq9ahv"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1nzq60hrphyr8anvkw6fv93mhafew7ez4tq9ahv"
+							},
+							{
+								"key": "sender",
+								"value": "kava1eyugkwc74zejgwdwl7mvm7pad4hzdnka4wmdmu"
+							},
+							{
+								"key": "amount",
+								"value": "9988900000xrpb"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "200000",
+		"gas_used": "94922",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "bep3/MsgClaimAtomicSwap",
+						"value": {
+							"from": "kava1nzq60hrphyr8anvkw6fv93mhafew7ez4tq9ahv",
+							"swap_id": "79E36ACBD5AD7C810374E0A1D2875036FAFAA9C4BF0B984567C7736CA9F54DA4",
+							"random_number": "AC07393B84C63689F283185453AD4C671B62F510D7939AC4110315CDD6EC251E"
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "ukava",
+							"amount": "0"
+						}
+					],
+					"gas": "200000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "AnO5n41bQaPBo8HOqGH/OMjMYILD/Q+4U6HBaXU5u59i"
+						},
+						"signature": "pf79X63m6JF9e7HWnQIvbKbD5/zg8q2VQQhF9dZ9SiYoA+JD6wYECNOyQ5ZTfcB0Us5w4dGznFG8WmTsROrAjQ=="
+					}
+				],
+				"memo": "Claim Atomic Swap via Cosmostation iOS Wallet"
+			}
+		},
+		"timestamp": "2020-11-10T13:42:52Z"
+	}
+}

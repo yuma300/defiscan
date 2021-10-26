@@ -1,0 +1,120 @@
+{
+	"header": {
+		"id": 2674702,
+		"chain_id": "kava-8",
+		"block_id": 7634050,
+		"timestamp": "2021-08-30T17:54:42Z"
+	},
+	"data": {
+		"height": "1412",
+		"txhash": "425BE10B2E9A6358CE30251C51FE910E3A4CA45F2928F3AC26F0A5C1C57576C8",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"swap_deposit\"},{\"key\":\"sender\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"},{\"key\":\"module\",\"value\":\"swap\"},{\"key\":\"sender\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"}]},{\"type\":\"swap_deposit\",\"attributes\":[{\"key\":\"pool_id\",\"value\":\"busd:usdx\"},{\"key\":\"depositor\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"},{\"key\":\"amount\",\"value\":\"191440274498busd,1918518830usdx\"},{\"key\":\"shares\",\"value\":\"19155352120\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu\"},{\"key\":\"sender\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"},{\"key\":\"amount\",\"value\":\"191440274498busd,1918518830usdx\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "swap_deposit"
+							},
+							{
+								"key": "sender",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							},
+							{
+								"key": "module",
+								"value": "swap"
+							},
+							{
+								"key": "sender",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							}
+						]
+					},
+					{
+						"type": "swap_deposit",
+						"attributes": [
+							{
+								"key": "pool_id",
+								"value": "busd:usdx"
+							},
+							{
+								"key": "depositor",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							},
+							{
+								"key": "amount",
+								"value": "191440274498busd,1918518830usdx"
+							},
+							{
+								"key": "shares",
+								"value": "19155352120"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu"
+							},
+							{
+								"key": "sender",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							},
+							{
+								"key": "amount",
+								"value": "191440274498busd,1918518830usdx"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "1000000",
+		"gas_used": "162106",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "swap/MsgDeposit",
+						"value": {
+							"depositor": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0",
+							"token_a": {
+								"denom": "usdx",
+								"amount": "1918518831"
+							},
+							"token_b": {
+								"denom": "busd",
+								"amount": "191440274498"
+							},
+							"slippage": "0.010000000000000000",
+							"deadline": "1630346379"
+						}
+					}
+				],
+				"fee": {
+					"amount": [],
+					"gas": "1000000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "Ai0LYc99PazJTnef1wqBjeafEVxfdJHCOnInMQb2kHzE"
+						},
+						"signature": "y8IaaltU9lvCsiZU/r0px6aEpqp3EVlsydeLaoCFLc55G5puVd6jcfh7ZmdrLEr5W6hnHDcqamUvWik0AT2DaA=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-08-30T17:54:42Z"
+	}
+}

@@ -1,0 +1,88 @@
+{
+	"header": {
+		"id": 3057114,
+		"chain_id": "kava-8",
+		"block_id": 8038822,
+		"timestamp": "2021-10-02T01:35:37Z"
+	},
+	"data": {
+		"height": "406184",
+		"txhash": "C1FC796FCD2901530F87B5FA2BBA3FCBA8CF16D7C22226C8E910C240CF3BA930",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"vote\"},{\"key\":\"module\",\"value\":\"governance\"},{\"key\":\"sender\",\"value\":\"kava179ahnk902wgm7qzr66t5ga0a8euc28ce703jy3\"}]},{\"type\":\"proposal_vote\",\"attributes\":[{\"key\":\"option\",\"value\":\"Abstain\"},{\"key\":\"proposal_id\",\"value\":\"63\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "vote"
+							},
+							{
+								"key": "module",
+								"value": "governance"
+							},
+							{
+								"key": "sender",
+								"value": "kava179ahnk902wgm7qzr66t5ga0a8euc28ce703jy3"
+							}
+						]
+					},
+					{
+						"type": "proposal_vote",
+						"attributes": [
+							{
+								"key": "option",
+								"value": "Abstain"
+							},
+							{
+								"key": "proposal_id",
+								"value": "63"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "300000",
+		"gas_used": "235556",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cosmos-sdk/MsgVote",
+						"value": {
+							"proposal_id": "63",
+							"voter": "kava179ahnk902wgm7qzr66t5ga0a8euc28ce703jy3",
+							"option": "Abstain"
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "ukava",
+							"amount": "750"
+						}
+					],
+					"gas": "300000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "An0/K1le2Ktt0bf5Z490fNBZy8+HeMEKMSKlzZ5IwhOa"
+						},
+						"signature": "0A2YzIGwKz1shnWA1Tqs1zmt1/uvySESVPBAOeFaMkwfkD9MaekuKwC9f29bVLpNTt47aSgOHml8ZRIIQ3DbJg=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-10-02T01:35:37Z"
+	}
+}

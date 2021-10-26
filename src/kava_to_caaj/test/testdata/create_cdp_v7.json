@@ -1,0 +1,150 @@
+{
+	"header": {
+		"id": 2003265,
+		"chain_id": "kava-7",
+		"block_id": 6490627,
+		"timestamp": "2021-06-03T14:41:06Z"
+	},
+	"data": {
+		"height": "736498",
+		"txhash": "89261DCBDB172AA1AE446F8AC7E90BE7AFA422457C0145D741A77AB07D2D7D08",
+		"data": "0000000000001E25",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"cdp_deposit\",\"attributes\":[{\"key\":\"amount\",\"value\":\"10093653846hard\"},{\"key\":\"cdp_id\",\"value\":\"7717\"}]},{\"type\":\"cdp_draw\",\"attributes\":[{\"key\":\"amount\",\"value\":\"3500000000usdx\"},{\"key\":\"cdp_id\",\"value\":\"7717\"}]},{\"type\":\"create_cdp\",\"attributes\":[{\"key\":\"cdp_id\",\"value\":\"7717\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"create_cdp\"},{\"key\":\"sender\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"},{\"key\":\"sender\",\"value\":\"kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp\"},{\"key\":\"module\",\"value\":\"cdp\"},{\"key\":\"sender\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp\"},{\"key\":\"sender\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"},{\"key\":\"amount\",\"value\":\"10093653846hard\"},{\"key\":\"recipient\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"},{\"key\":\"sender\",\"value\":\"kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp\"},{\"key\":\"amount\",\"value\":\"3500000000usdx\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "cdp_deposit",
+						"attributes": [
+							{
+								"key": "amount",
+								"value": "10093653846hard"
+							},
+							{
+								"key": "cdp_id",
+								"value": "7717"
+							}
+						]
+					},
+					{
+						"type": "cdp_draw",
+						"attributes": [
+							{
+								"key": "amount",
+								"value": "3500000000usdx"
+							},
+							{
+								"key": "cdp_id",
+								"value": "7717"
+							}
+						]
+					},
+					{
+						"type": "create_cdp",
+						"attributes": [
+							{
+								"key": "cdp_id",
+								"value": "7717"
+							}
+						]
+					},
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "create_cdp"
+							},
+							{
+								"key": "sender",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							},
+							{
+								"key": "sender",
+								"value": "kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp"
+							},
+							{
+								"key": "module",
+								"value": "cdp"
+							},
+							{
+								"key": "sender",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp"
+							},
+							{
+								"key": "sender",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							},
+							{
+								"key": "amount",
+								"value": "10093653846hard"
+							},
+							{
+								"key": "recipient",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							},
+							{
+								"key": "sender",
+								"value": "kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp"
+							},
+							{
+								"key": "amount",
+								"value": "3500000000usdx"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "1000000",
+		"gas_used": "489086",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cdp/MsgCreateCDP",
+						"value": {
+							"sender": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl",
+							"collateral": {
+								"denom": "hard",
+								"amount": "10093653846"
+							},
+							"principal": {
+								"denom": "usdx",
+								"amount": "3500000000"
+							},
+							"collateral_type": "hard-a"
+						}
+					}
+				],
+				"fee": {
+					"amount": [],
+					"gas": "1000000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "AzE779oaD9zua2Dkgyoi3p7iDZg1LU7AysH7lzCSiIZk"
+						},
+						"signature": "C7u/fzSbgWM1hYAVbTuKUQ859cxIyyoshe99DIbI+ro612QDZa1Hwu3ctZA+XIWcba8UIsK5I/Mkqkek+UoIIw=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-06-03T14:41:06Z"
+	}
+}

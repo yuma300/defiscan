@@ -1,0 +1,133 @@
+{
+	"header": {
+		"id": 2645651,
+		"chain_id": "kava-7",
+		"block_id": 7592519,
+		"timestamp": "2021-08-27T10:25:33Z"
+	},
+	"data": {
+		"height": "1838390",
+		"txhash": "F802145370951CCCE74B87332F02FB5F32B9D8DB5473A7E493931DE6B7C24F52",
+		"data": "0B089DDA918A0610D6EBCC01",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"begin_unbonding\"},{\"key\":\"sender\",\"value\":\"kava1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8m2splc\"},{\"key\":\"sender\",\"value\":\"kava1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3fwaj0s\"},{\"key\":\"module\",\"value\":\"staking\"},{\"key\":\"sender\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"},{\"key\":\"sender\",\"value\":\"kava1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8m2splc\"},{\"key\":\"amount\",\"value\":\"1703ukava\"},{\"key\":\"recipient\",\"value\":\"kava1tygms3xhhs3yv487phx3dw4a95jn7t7lawprey\"},{\"key\":\"sender\",\"value\":\"kava1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3fwaj0s\"},{\"key\":\"amount\",\"value\":\"343546602ukava\"}]},{\"type\":\"unbond\",\"attributes\":[{\"key\":\"validator\",\"value\":\"kavavaloper1g20mhvcpjxp6gzlwhtfcphjehwcl2njqydgu7q\"},{\"key\":\"amount\",\"value\":\"343546602\"},{\"key\":\"completion_time\",\"value\":\"2021-09-17T10:25:33Z\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "begin_unbonding"
+							},
+							{
+								"key": "sender",
+								"value": "kava1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8m2splc"
+							},
+							{
+								"key": "sender",
+								"value": "kava1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3fwaj0s"
+							},
+							{
+								"key": "module",
+								"value": "staking"
+							},
+							{
+								"key": "sender",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							},
+							{
+								"key": "sender",
+								"value": "kava1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8m2splc"
+							},
+							{
+								"key": "amount",
+								"value": "1703ukava"
+							},
+							{
+								"key": "recipient",
+								"value": "kava1tygms3xhhs3yv487phx3dw4a95jn7t7lawprey"
+							},
+							{
+								"key": "sender",
+								"value": "kava1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3fwaj0s"
+							},
+							{
+								"key": "amount",
+								"value": "343546602ukava"
+							}
+						]
+					},
+					{
+						"type": "unbond",
+						"attributes": [
+							{
+								"key": "validator",
+								"value": "kavavaloper1g20mhvcpjxp6gzlwhtfcphjehwcl2njqydgu7q"
+							},
+							{
+								"key": "amount",
+								"value": "343546602"
+							},
+							{
+								"key": "completion_time",
+								"value": "2021-09-17T10:25:33Z"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "500000",
+		"gas_used": "230540",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cosmos-sdk/MsgUndelegate",
+						"value": {
+							"delegator_address": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl",
+							"validator_address": "kavavaloper1g20mhvcpjxp6gzlwhtfcphjehwcl2njqydgu7q",
+							"amount": {
+								"denom": "ukava",
+								"amount": "343546602"
+							}
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "ukava",
+							"amount": "10000"
+						}
+					],
+					"gas": "500000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "AzE779oaD9zua2Dkgyoi3p7iDZg1LU7AysH7lzCSiIZk"
+						},
+						"signature": "MbBjuPGHkeaI1lcYK+nS68eC6AhDR1TkSDBchNl8t4UXGNmZuiTUS07QqnaSkf96NxeZck++CRGc09Vs+TpAMw=="
+					}
+				],
+				"memo": "Stake via Trust Wallet"
+			}
+		},
+		"timestamp": "2021-08-27T10:25:33Z"
+	}
+}

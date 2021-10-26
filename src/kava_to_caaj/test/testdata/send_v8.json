@@ -1,0 +1,97 @@
+{
+	"header": {
+		"id": 3195729,
+		"chain_id": "kava-8",
+		"block_id": 8217640,
+		"timestamp": "2021-10-16T01:26:47Z"
+	},
+	"data": {
+		"height": "585002",
+		"txhash": "C1973EA66796DEFBA950B2A79E9E8118EB0DC4E68E16EFD76E507FC18B1E0DDF",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"send\"},{\"key\":\"sender\",\"value\":\"kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea\"},{\"key\":\"module\",\"value\":\"bank\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1ys70jvnajkv88529ys6urjcyle3k2j9r24g6a7\"},{\"key\":\"sender\",\"value\":\"kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea\"},{\"key\":\"amount\",\"value\":\"2170000ukava\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "send"
+							},
+							{
+								"key": "sender",
+								"value": "kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea"
+							},
+							{
+								"key": "module",
+								"value": "bank"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1ys70jvnajkv88529ys6urjcyle3k2j9r24g6a7"
+							},
+							{
+								"key": "sender",
+								"value": "kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea"
+							},
+							{
+								"key": "amount",
+								"value": "2170000ukava"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "500000",
+		"gas_used": "181017",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cosmos-sdk/MsgSend",
+						"value": {
+							"from_address": "kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea",
+							"to_address": "kava1ys70jvnajkv88529ys6urjcyle3k2j9r24g6a7",
+							"amount": [
+								{
+									"denom": "ukava",
+									"amount": "2170000"
+								}
+							]
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "ukava",
+							"amount": "10000"
+						}
+					],
+					"gas": "500000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "AmhJb5zU7nwCU8uoT2ufKSSNEXI+GCUFuNGFlHtBH8UO"
+						},
+						"signature": "3phrNNiagkRMKzGs/PRJxq1e+qi6pLy292MQg3KH0VI4VWFEirVMFZ+PcSPC2d/FqzwpZhaMoJKgvZk5Y5zEbg=="
+					}
+				],
+				"memo": "100339994"
+			}
+		},
+		"timestamp": "2021-10-16T01:26:47Z"
+	}
+}
