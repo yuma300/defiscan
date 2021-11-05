@@ -1,0 +1,57 @@
+{
+	"header": {
+		"id": 3112552,
+		"chain_id": "kava-8",
+		"block_id": 8115775,
+		"timestamp": "2021-10-08T02:25:45Z"
+	},
+	"data": {
+		"height": "483137",
+		"txhash": "F2FC1DF24185A9909DF3E3BC87726AAF1440F94FE2BE1633F0A7BAA2E09B069F",
+		"codespace": "sdk",
+		"code": 5,
+		"raw_log": "insufficient funds: insufficient account funds; 2877879ukava < 2880000ukava: failed to execute message; message index: 0",
+		"gas_wanted": "500000",
+		"gas_used": "126956",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cosmos-sdk/MsgSend",
+						"value": {
+							"from_address": "kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea",
+							"to_address": "kava1ys70jvnajkv88529ys6urjcyle3k2j9r24g6a7",
+							"amount": [
+								{
+									"denom": "ukava",
+									"amount": "2880000"
+								}
+							]
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "ukava",
+							"amount": "10000"
+						}
+					],
+					"gas": "500000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "AmhJb5zU7nwCU8uoT2ufKSSNEXI+GCUFuNGFlHtBH8UO"
+						},
+						"signature": "BLsZFgCm6JgXtGatvo3oTXMGYLxmJ7G+L+l9ilGOsDRypXAt7L7pBA+LIAi/rm98oKA6SY5J8UC0GpYWj+xEdw=="
+					}
+				],
+				"memo": "100339994"
+			}
+		},
+		"timestamp": "2021-10-08T02:25:45Z"
+	}
+}

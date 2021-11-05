@@ -1,0 +1,113 @@
+{
+	"header": {
+		"id": 2807324,
+		"chain_id": "kava-8",
+		"block_id": 7755098,
+		"timestamp": "2021-09-09T04:39:11Z"
+	},
+	"data": {
+		"height": "122460",
+		"txhash": "177C2066F3604B1E7EDE6F4CF2B355125FB58E22F026E6E82FD3556D7EE416DD",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"cdp_withdrawal\",\"attributes\":[{\"key\":\"amount\",\"value\":\"100000000bnb\"},{\"key\":\"cdp_id\",\"value\":\"130\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"withdraw_cdp\"},{\"key\":\"sender\",\"value\":\"kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp\"},{\"key\":\"module\",\"value\":\"cdp\"},{\"key\":\"sender\",\"value\":\"kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4\"},{\"key\":\"sender\",\"value\":\"kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp\"},{\"key\":\"amount\",\"value\":\"100000000bnb\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "cdp_withdrawal",
+						"attributes": [
+							{
+								"key": "amount",
+								"value": "100000000bnb"
+							},
+							{
+								"key": "cdp_id",
+								"value": "130"
+							}
+						]
+					},
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "withdraw_cdp"
+							},
+							{
+								"key": "sender",
+								"value": "kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp"
+							},
+							{
+								"key": "module",
+								"value": "cdp"
+							},
+							{
+								"key": "sender",
+								"value": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4"
+							},
+							{
+								"key": "sender",
+								"value": "kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp"
+							},
+							{
+								"key": "amount",
+								"value": "100000000bnb"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "2000000",
+		"gas_used": "633835",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cdp/MsgWithdraw",
+						"value": {
+							"depositor": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4",
+							"owner": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4",
+							"collateral": {
+								"denom": "bnb",
+								"amount": "100000000"
+							},
+							"collateral_type": "bnb-a"
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "ukava",
+							"amount": "5000"
+						}
+					],
+					"gas": "2000000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "A+yDylmaJiHZBPJU1UVZq7ak/W8/1v0X8nArRM7KpS36"
+						},
+						"signature": "EBb8uZWU1ZRlFLKbj6KRVAwgbTuINgQYy4cyOegAmLk906/Wsv5FaL6nXso2f7QzoaVWm9u/wAcqozg+lNvKZw=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-09-09T04:39:11Z"
+	}
+}

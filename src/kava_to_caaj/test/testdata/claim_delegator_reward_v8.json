@@ -1,0 +1,136 @@
+{
+	"header": {
+		"id": 2728378,
+		"chain_id": "kava-8",
+		"block_id": 7682952,
+		"timestamp": "2021-09-03T13:05:07Z"
+	},
+	"data": {
+		"height": "50314",
+		"txhash": "ABE8DF74E23D75CEDB506FA4F7A6B595ED936D60FA8ECAE84F873330AFB5B445",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"claim_reward\",\"attributes\":[{\"key\":\"claimed_by\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"},{\"key\":\"claim_amount\",\"value\":\"224049hard\"},{\"key\":\"claim_type\",\"value\":\"delegator_claim\"},{\"key\":\"claimed_by\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"},{\"key\":\"claim_amount\",\"value\":\"140126swp\"},{\"key\":\"claim_type\",\"value\":\"delegator_claim\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"claim_delegator_reward\"},{\"key\":\"sender\",\"value\":\"kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w\"},{\"key\":\"sender\",\"value\":\"kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"},{\"key\":\"sender\",\"value\":\"kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w\"},{\"key\":\"amount\",\"value\":\"224049hard\"},{\"key\":\"recipient\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"},{\"key\":\"sender\",\"value\":\"kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w\"},{\"key\":\"amount\",\"value\":\"140126swp\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "claim_reward",
+						"attributes": [
+							{
+								"key": "claimed_by",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							},
+							{
+								"key": "claim_amount",
+								"value": "224049hard"
+							},
+							{
+								"key": "claim_type",
+								"value": "delegator_claim"
+							},
+							{
+								"key": "claimed_by",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							},
+							{
+								"key": "claim_amount",
+								"value": "140126swp"
+							},
+							{
+								"key": "claim_type",
+								"value": "delegator_claim"
+							}
+						]
+					},
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "claim_delegator_reward"
+							},
+							{
+								"key": "sender",
+								"value": "kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w"
+							},
+							{
+								"key": "sender",
+								"value": "kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							},
+							{
+								"key": "sender",
+								"value": "kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w"
+							},
+							{
+								"key": "amount",
+								"value": "224049hard"
+							},
+							{
+								"key": "recipient",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							},
+							{
+								"key": "sender",
+								"value": "kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w"
+							},
+							{
+								"key": "amount",
+								"value": "140126swp"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "1000000",
+		"gas_used": "283825",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "incentive/MsgClaimDelegatorReward",
+						"value": {
+							"sender": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl",
+							"denoms_to_claim": [
+								{
+									"denom": "hard",
+									"multiplier_name": "large"
+								},
+								{
+									"denom": "swp",
+									"multiplier_name": "large"
+								}
+							]
+						}
+					}
+				],
+				"fee": {
+					"amount": [],
+					"gas": "1000000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "AzE779oaD9zua2Dkgyoi3p7iDZg1LU7AysH7lzCSiIZk"
+						},
+						"signature": "1nE0hUFPKQC5p2DWzgpkYuEj2aXlUNgt46mKgVvWrO8KCkcIAL92WA5FyKENX0bKy2zSCOAr89g+dTMcn03BDA=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-09-03T13:05:07Z"
+	}
+}

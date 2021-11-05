@@ -1,0 +1,108 @@
+{
+	"header": {
+		"id": 2928247,
+		"chain_id": "kava-8",
+		"block_id": 7902647,
+		"timestamp": "2021-09-21T00:51:36Z"
+	},
+	"data": {
+		"height": "270009",
+		"txhash": "0CA2F41878E32422BF7E4851FCFCC0630F22F7A6AD202AC2BD6BC3171DCE5BDE",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"hard_borrow\",\"attributes\":[{\"key\":\"borrower\",\"value\":\"kava1vtcpusw3fkzvhxmnuztjdan5v93tw558pp4y47\"},{\"key\":\"borrow_coins\",\"value\":\"263778595858busd\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"hard_borrow\"},{\"key\":\"sender\",\"value\":\"kava1a42xtwfzphuuu9mdp0es6633wu5mm8fhm789v3\"},{\"key\":\"module\",\"value\":\"hard\"},{\"key\":\"sender\",\"value\":\"kava1vtcpusw3fkzvhxmnuztjdan5v93tw558pp4y47\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1vtcpusw3fkzvhxmnuztjdan5v93tw558pp4y47\"},{\"key\":\"sender\",\"value\":\"kava1a42xtwfzphuuu9mdp0es6633wu5mm8fhm789v3\"},{\"key\":\"amount\",\"value\":\"263778595858busd\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "hard_borrow",
+						"attributes": [
+							{
+								"key": "borrower",
+								"value": "kava1vtcpusw3fkzvhxmnuztjdan5v93tw558pp4y47"
+							},
+							{
+								"key": "borrow_coins",
+								"value": "263778595858busd"
+							}
+						]
+					},
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "hard_borrow"
+							},
+							{
+								"key": "sender",
+								"value": "kava1a42xtwfzphuuu9mdp0es6633wu5mm8fhm789v3"
+							},
+							{
+								"key": "module",
+								"value": "hard"
+							},
+							{
+								"key": "sender",
+								"value": "kava1vtcpusw3fkzvhxmnuztjdan5v93tw558pp4y47"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1vtcpusw3fkzvhxmnuztjdan5v93tw558pp4y47"
+							},
+							{
+								"key": "sender",
+								"value": "kava1a42xtwfzphuuu9mdp0es6633wu5mm8fhm789v3"
+							},
+							{
+								"key": "amount",
+								"value": "263778595858busd"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "1000000",
+		"gas_used": "186687",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "hard/MsgBorrow",
+						"value": {
+							"borrower": "kava1vtcpusw3fkzvhxmnuztjdan5v93tw558pp4y47",
+							"amount": [
+								{
+									"denom": "busd",
+									"amount": "263778595858"
+								}
+							]
+						}
+					}
+				],
+				"fee": {
+					"amount": [],
+					"gas": "1000000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "Asz+X4MbDV+86fE7kgcmdce8k0KCXUdqXg9Q2HKct0Zm"
+						},
+						"signature": "diYHSsHlRFDdOpOVk7MVA0iTqZcOyMmkhtUt+GEfBjwEnNEP3NjPrSJVgRemnAOwNN/GXiBifk6i3E1sdOIlgQ=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-09-21T00:51:36Z"
+	}
+}

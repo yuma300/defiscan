@@ -1,0 +1,137 @@
+{
+	"header": {
+		"id": 2807349,
+		"chain_id": "kava-8",
+		"block_id": 7755125,
+		"timestamp": "2021-09-09T04:42:15Z"
+	},
+	"data": {
+		"height": "122487",
+		"txhash": "158660081326903E34AD7B4CD1D95C600A743B63392F88667A388AB048E557FE",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"cdp_close\",\"attributes\":[{\"key\":\"cdp_id\",\"value\":\"130\"}]},{\"type\":\"cdp_repayment\",\"attributes\":[{\"key\":\"amount\",\"value\":\"10050333usdx\"},{\"key\":\"cdp_id\",\"value\":\"130\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"repay_cdp\"},{\"key\":\"sender\",\"value\":\"kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4\"},{\"key\":\"sender\",\"value\":\"kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp\"},{\"key\":\"module\",\"value\":\"cdp\"},{\"key\":\"sender\",\"value\":\"kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp\"},{\"key\":\"sender\",\"value\":\"kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4\"},{\"key\":\"amount\",\"value\":\"10050333usdx\"},{\"key\":\"recipient\",\"value\":\"kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4\"},{\"key\":\"sender\",\"value\":\"kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp\"},{\"key\":\"amount\",\"value\":\"36428994bnb\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "cdp_close",
+						"attributes": [
+							{
+								"key": "cdp_id",
+								"value": "130"
+							}
+						]
+					},
+					{
+						"type": "cdp_repayment",
+						"attributes": [
+							{
+								"key": "amount",
+								"value": "10050333usdx"
+							},
+							{
+								"key": "cdp_id",
+								"value": "130"
+							}
+						]
+					},
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "repay_cdp"
+							},
+							{
+								"key": "sender",
+								"value": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4"
+							},
+							{
+								"key": "sender",
+								"value": "kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp"
+							},
+							{
+								"key": "module",
+								"value": "cdp"
+							},
+							{
+								"key": "sender",
+								"value": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp"
+							},
+							{
+								"key": "sender",
+								"value": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4"
+							},
+							{
+								"key": "amount",
+								"value": "10050333usdx"
+							},
+							{
+								"key": "recipient",
+								"value": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4"
+							},
+							{
+								"key": "sender",
+								"value": "kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp"
+							},
+							{
+								"key": "amount",
+								"value": "36428994bnb"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "2000000",
+		"gas_used": "645127",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cdp/MsgRepayDebt",
+						"value": {
+							"sender": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4",
+							"collateral_type": "bnb-a",
+							"payment": {
+								"denom": "usdx",
+								"amount": "10050334"
+							}
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "ukava",
+							"amount": "5000"
+						}
+					],
+					"gas": "2000000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "A+yDylmaJiHZBPJU1UVZq7ak/W8/1v0X8nArRM7KpS36"
+						},
+						"signature": "OL04S0fNkBObVKjMkQNXmulVGrnzOaL572yepxHcoVF4LPMhQUfIUrAYEhlxme/AVT1bk0qwfo7ALWoZA8yJWA=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-09-09T04:42:15Z"
+	}
+}

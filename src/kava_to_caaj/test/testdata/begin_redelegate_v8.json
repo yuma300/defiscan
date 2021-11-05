@@ -1,0 +1,122 @@
+{
+	"header": {
+		"id": 2897164,
+		"chain_id": "kava-8",
+		"block_id": 7866833,
+		"timestamp": "2021-09-18T03:21:16Z"
+	},
+	"data": {
+		"height": "234195",
+		"txhash": "1C2C7D7C15A38B40F10CB9AE51E86F4455E4EB3969BA4EFF977FB07B4105F33E",
+		"data": "0C08AC95848B06108DB9B9BE02",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"begin_redelegate\"},{\"key\":\"sender\",\"value\":\"kava1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8m2splc\"},{\"key\":\"module\",\"value\":\"staking\"},{\"key\":\"sender\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"}]},{\"type\":\"redelegate\",\"attributes\":[{\"key\":\"source_validator\",\"value\":\"kavavaloper1ceun2qqw65qce5la33j8zv8ltyyaqqfctl35n4\"},{\"key\":\"destination_validator\",\"value\":\"kavavaloper17u9s2fx5htqdsuk78hkfskw9s5g06tzqyl2m8j\"},{\"key\":\"amount\",\"value\":\"4581817266\"},{\"key\":\"completion_time\",\"value\":\"2021-10-09T03:21:16Z\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"},{\"key\":\"sender\",\"value\":\"kava1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8m2splc\"},{\"key\":\"amount\",\"value\":\"3687213ukava\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "begin_redelegate"
+							},
+							{
+								"key": "sender",
+								"value": "kava1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8m2splc"
+							},
+							{
+								"key": "module",
+								"value": "staking"
+							},
+							{
+								"key": "sender",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							}
+						]
+					},
+					{
+						"type": "redelegate",
+						"attributes": [
+							{
+								"key": "source_validator",
+								"value": "kavavaloper1ceun2qqw65qce5la33j8zv8ltyyaqqfctl35n4"
+							},
+							{
+								"key": "destination_validator",
+								"value": "kavavaloper17u9s2fx5htqdsuk78hkfskw9s5g06tzqyl2m8j"
+							},
+							{
+								"key": "amount",
+								"value": "4581817266"
+							},
+							{
+								"key": "completion_time",
+								"value": "2021-10-09T03:21:16Z"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							},
+							{
+								"key": "sender",
+								"value": "kava1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8m2splc"
+							},
+							{
+								"key": "amount",
+								"value": "3687213ukava"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "500000",
+		"gas_used": "373860",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cosmos-sdk/MsgBeginRedelegate",
+						"value": {
+							"delegator_address": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0",
+							"validator_src_address": "kavavaloper1ceun2qqw65qce5la33j8zv8ltyyaqqfctl35n4",
+							"validator_dst_address": "kavavaloper17u9s2fx5htqdsuk78hkfskw9s5g06tzqyl2m8j",
+							"amount": {
+								"denom": "ukava",
+								"amount": "4581817266"
+							}
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "ukava",
+							"amount": "5000"
+						}
+					],
+					"gas": "500000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "Ai0LYc99PazJTnef1wqBjeafEVxfdJHCOnInMQb2kHzE"
+						},
+						"signature": "rd66BKVJiTsrkOrNBgrAuWkcj9O4wwHccznqcHKu+qN5leyaZg593u+3N4f6muLlZuagKxgK1nrIKVYYdn0wgQ=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-09-18T03:21:16Z"
+	}
+}

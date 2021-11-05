@@ -1,0 +1,149 @@
+{
+	"header": {
+		"id": 2807343,
+		"chain_id": "kava-8",
+		"block_id": 7755118,
+		"timestamp": "2021-09-09T04:41:25Z"
+	},
+	"data": {
+		"height": "122480",
+		"txhash": "4B226210F5E04A54E79931ECF5C1D32F2FD9F45139C0DC1C3A0481532AE60448",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"swap_exact_for_tokens\"},{\"key\":\"sender\",\"value\":\"kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4\"},{\"key\":\"sender\",\"value\":\"kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu\"},{\"key\":\"module\",\"value\":\"swap\"},{\"key\":\"sender\",\"value\":\"kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4\"}]},{\"type\":\"swap_trade\",\"attributes\":[{\"key\":\"pool_id\",\"value\":\"bnb:usdx\"},{\"key\":\"requester\",\"value\":\"kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4\"},{\"key\":\"input\",\"value\":\"3000000bnb\"},{\"key\":\"output\",\"value\":\"12290319usdx\"},{\"key\":\"fee\",\"value\":\"4500bnb\"},{\"key\":\"exact\",\"value\":\"input\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu\"},{\"key\":\"sender\",\"value\":\"kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4\"},{\"key\":\"amount\",\"value\":\"3000000bnb\"},{\"key\":\"recipient\",\"value\":\"kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4\"},{\"key\":\"sender\",\"value\":\"kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu\"},{\"key\":\"amount\",\"value\":\"12290319usdx\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "swap_exact_for_tokens"
+							},
+							{
+								"key": "sender",
+								"value": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4"
+							},
+							{
+								"key": "sender",
+								"value": "kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu"
+							},
+							{
+								"key": "module",
+								"value": "swap"
+							},
+							{
+								"key": "sender",
+								"value": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4"
+							}
+						]
+					},
+					{
+						"type": "swap_trade",
+						"attributes": [
+							{
+								"key": "pool_id",
+								"value": "bnb:usdx"
+							},
+							{
+								"key": "requester",
+								"value": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4"
+							},
+							{
+								"key": "input",
+								"value": "3000000bnb"
+							},
+							{
+								"key": "output",
+								"value": "12290319usdx"
+							},
+							{
+								"key": "fee",
+								"value": "4500bnb"
+							},
+							{
+								"key": "exact",
+								"value": "input"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu"
+							},
+							{
+								"key": "sender",
+								"value": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4"
+							},
+							{
+								"key": "amount",
+								"value": "3000000bnb"
+							},
+							{
+								"key": "recipient",
+								"value": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4"
+							},
+							{
+								"key": "sender",
+								"value": "kava1mfru9azs5nua2wxcd4sq64g5nt7nn4n8s2w8cu"
+							},
+							{
+								"key": "amount",
+								"value": "12290319usdx"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "800000",
+		"gas_used": "204096",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "swap/MsgSwapExactForTokens",
+						"value": {
+							"requester": "kava1mdm5595gw7n2yrfa6fjdrk2xwzn4njkj2akvq4",
+							"exact_token_a": {
+								"denom": "bnb",
+								"amount": "3000000"
+							},
+							"token_b": {
+								"denom": "usdx",
+								"amount": "11921225"
+							},
+							"slippage": "0.300000000000000000",
+							"deadline": "1631162946"
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "ukava",
+							"amount": "2000"
+						}
+					],
+					"gas": "800000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "A+yDylmaJiHZBPJU1UVZq7ak/W8/1v0X8nArRM7KpS36"
+						},
+						"signature": "p3W1mHW/Zvigto8iw494AcUpY43OoBU4ANKBKaNnaBcjrBIfgYXxNPuTJbLQBLCF9W9xrAaMpaqrhE1m7xh3jQ=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-09-09T04:41:25Z"
+	}
+}

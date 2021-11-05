@@ -1,0 +1,104 @@
+{
+	"header": {
+		"id": 2871035,
+		"chain_id": "kava-8",
+		"block_id": 7834740,
+		"timestamp": "2021-09-15T13:05:53Z"
+	},
+	"data": {
+		"height": "202102",
+		"txhash": "C2D830944FCD1B98DF6D6939BA6367047C8B76D8DC40888332D5C658DFFAA06E",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"claim_reward\",\"attributes\":[{\"key\":\"claimed_by\",\"value\":\"kava12f45zhguupp5jaa622rpp3n5jyejc4jc3dd5sq\"},{\"key\":\"claim_amount\",\"value\":\"830379251swp\"},{\"key\":\"claim_type\",\"value\":\"swap\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"claim_swap_reward\"},{\"key\":\"sender\",\"value\":\"kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava12f45zhguupp5jaa622rpp3n5jyejc4jc3dd5sq\"},{\"key\":\"sender\",\"value\":\"kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w\"},{\"key\":\"amount\",\"value\":\"830379251swp\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "claim_reward",
+						"attributes": [
+							{
+								"key": "claimed_by",
+								"value": "kava12f45zhguupp5jaa622rpp3n5jyejc4jc3dd5sq"
+							},
+							{
+								"key": "claim_amount",
+								"value": "830379251swp"
+							},
+							{
+								"key": "claim_type",
+								"value": "swap"
+							}
+						]
+					},
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "claim_swap_reward"
+							},
+							{
+								"key": "sender",
+								"value": "kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava12f45zhguupp5jaa622rpp3n5jyejc4jc3dd5sq"
+							},
+							{
+								"key": "sender",
+								"value": "kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w"
+							},
+							{
+								"key": "amount",
+								"value": "830379251swp"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "1000000",
+		"gas_used": "177465",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "incentive/MsgClaimSwapReward",
+						"value": {
+							"sender": "kava12f45zhguupp5jaa622rpp3n5jyejc4jc3dd5sq",
+							"denoms_to_claim": [
+								{
+									"denom": "swp",
+									"multiplier_name": "large"
+								}
+							]
+						}
+					}
+				],
+				"fee": {
+					"amount": [],
+					"gas": "1000000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "A/Rq6VSfugIApg0k579y7Enfq5GBMx2TqLpvFBc22Avg"
+						},
+						"signature": "T/v6aA9QRttimT2AxAn21kTHsy3o0PTu9rROACk6/q9IHRwgiiKWmW8VaNq4bm6+eqASPtrUT4QtJz7Cg7Xmtg=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-09-15T13:05:53Z"
+	}
+}

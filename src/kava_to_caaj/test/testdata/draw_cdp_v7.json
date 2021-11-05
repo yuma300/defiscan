@@ -1,0 +1,107 @@
+{
+	"header": {
+		"id": 1971949,
+		"chain_id": "kava-7",
+		"block_id": 6444212,
+		"timestamp": "2021-05-31T01:41:38Z"
+	},
+	"data": {
+		"height": "690083",
+		"txhash": "1CAD58F890233F986B56B9D62955B398AA1F0F31F62A7AAC440BCC234F0A0D17",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"cdp_draw\",\"attributes\":[{\"key\":\"amount\",\"value\":\"300000000usdx\"},{\"key\":\"cdp_id\",\"value\":\"7528\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"draw_cdp\"},{\"key\":\"sender\",\"value\":\"kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp\"},{\"key\":\"module\",\"value\":\"cdp\"},{\"key\":\"sender\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"},{\"key\":\"sender\",\"value\":\"kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp\"},{\"key\":\"amount\",\"value\":\"300000000usdx\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "cdp_draw",
+						"attributes": [
+							{
+								"key": "amount",
+								"value": "300000000usdx"
+							},
+							{
+								"key": "cdp_id",
+								"value": "7528"
+							}
+						]
+					},
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "draw_cdp"
+							},
+							{
+								"key": "sender",
+								"value": "kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp"
+							},
+							{
+								"key": "module",
+								"value": "cdp"
+							},
+							{
+								"key": "sender",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							},
+							{
+								"key": "sender",
+								"value": "kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp"
+							},
+							{
+								"key": "amount",
+								"value": "300000000usdx"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "1000000",
+		"gas_used": "683940",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cdp/MsgDrawDebt",
+						"value": {
+							"sender": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl",
+							"collateral_type": "hard-a",
+							"principal": {
+								"denom": "usdx",
+								"amount": "300000000"
+							}
+						}
+					}
+				],
+				"fee": {
+					"amount": [],
+					"gas": "1000000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "AzE779oaD9zua2Dkgyoi3p7iDZg1LU7AysH7lzCSiIZk"
+						},
+						"signature": "F4EjYgKepmItHes7fb/c5XPSRw5rWYQMNhKiAGREmUch+ZlVkTAWTvcvzFx7zcvtYWe3/cxtccfx89SCpeU5Rw=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-05-31T01:41:38Z"
+	}
+}

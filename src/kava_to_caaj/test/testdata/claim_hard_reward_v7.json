@@ -1,0 +1,104 @@
+{
+	"header": {
+		"id": 2506518,
+		"chain_id": "kava-7",
+		"block_id": 7376329,
+		"timestamp": "2021-08-10T16:27:40Z"
+	},
+	"data": {
+		"height": "1622200",
+		"txhash": "0776DF1721C58ACC57DD620804506F5E8E94550AE07CD0ECC4153C50C8F60AB3",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"claim_reward\",\"attributes\":[{\"key\":\"claimed_by\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"},{\"key\":\"claim_amount\",\"value\":\"14418679hard,24675275ukava\"},{\"key\":\"claim_type\",\"value\":\"hard_liquidity_provider\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"claim_hard_reward\"},{\"key\":\"sender\",\"value\":\"kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl\"},{\"key\":\"sender\",\"value\":\"kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w\"},{\"key\":\"amount\",\"value\":\"14418679hard,24675275ukava\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "claim_reward",
+						"attributes": [
+							{
+								"key": "claimed_by",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							},
+							{
+								"key": "claim_amount",
+								"value": "14418679hard,24675275ukava"
+							},
+							{
+								"key": "claim_type",
+								"value": "hard_liquidity_provider"
+							}
+						]
+					},
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "claim_hard_reward"
+							},
+							{
+								"key": "sender",
+								"value": "kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl"
+							},
+							{
+								"key": "sender",
+								"value": "kava1cj7njkw2g9fqx4e768zc75dp9sks8u9znxrf0w"
+							},
+							{
+								"key": "amount",
+								"value": "14418679hard,24675275ukava"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "1000000",
+		"gas_used": "193238",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "incentive/MsgClaimHardReward",
+						"value": {
+							"sender": "kava1pxvyma3mp6hu0m2c58m54y59acwrwv3yp0r2wl",
+							"multiplier_name": "large"
+						}
+					}
+				],
+				"fee": {
+					"amount": [
+						{
+							"denom": "ukava",
+							"amount": "1000"
+						}
+					],
+					"gas": "1000000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "AzE779oaD9zua2Dkgyoi3p7iDZg1LU7AysH7lzCSiIZk"
+						},
+						"signature": "UOGQF5NSp3nkHW+NhwxaCsLVWrSDVRxsD/B+er9XeToUQKSWPyxMvAtTQHxA4zhRP5AY6gnSg486zICNsep34w=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-08-10T16:27:40Z"
+	}
+}

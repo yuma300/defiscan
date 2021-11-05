@@ -1,0 +1,108 @@
+{
+	"header": {
+		"id": 3063292,
+		"chain_id": "kava-8",
+		"block_id": 8046851,
+		"timestamp": "2021-10-02T17:19:14Z"
+	},
+	"data": {
+		"height": "414213",
+		"txhash": "88F40ACA82A9750B1750388E076C88E45B1E000E0BC32E0E2EAFFD22FF2E8177",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"cdp_deposit\",\"attributes\":[{\"key\":\"amount\",\"value\":\"506376309394xrpb\"},{\"key\":\"cdp_id\",\"value\":\"4082\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"deposit_cdp\"},{\"key\":\"sender\",\"value\":\"kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea\"},{\"key\":\"module\",\"value\":\"cdp\"},{\"key\":\"sender\",\"value\":\"kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp\"},{\"key\":\"sender\",\"value\":\"kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea\"},{\"key\":\"amount\",\"value\":\"506376309394xrpb\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "cdp_deposit",
+						"attributes": [
+							{
+								"key": "amount",
+								"value": "506376309394xrpb"
+							},
+							{
+								"key": "cdp_id",
+								"value": "4082"
+							}
+						]
+					},
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "deposit_cdp"
+							},
+							{
+								"key": "sender",
+								"value": "kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea"
+							},
+							{
+								"key": "module",
+								"value": "cdp"
+							},
+							{
+								"key": "sender",
+								"value": "kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1wq9ts6l7atfn45ryxrtg4a2gwegsh3xha9e6rp"
+							},
+							{
+								"key": "sender",
+								"value": "kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea"
+							},
+							{
+								"key": "amount",
+								"value": "506376309394xrpb"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "1000000",
+		"gas_used": "525729",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "cdp/MsgDeposit",
+						"value": {
+							"depositor": "kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea",
+							"owner": "kava1dlezgt8undlpvdp0esmzyvxzvc59gkd56vkmea",
+							"collateral": {
+								"denom": "xrpb",
+								"amount": "506376309394"
+							},
+							"collateral_type": "xrpb-a"
+						}
+					}
+				],
+				"fee": {
+					"amount": [],
+					"gas": "1000000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "AmhJb5zU7nwCU8uoT2ufKSSNEXI+GCUFuNGFlHtBH8UO"
+						},
+						"signature": "VIjhsfI8B6VrJP5CbxR+5+MqEfzlmoGljbRztq9iCft4hP7eYlh80kmQ36R5NBNOio6exDYvgV1+qPxlCRMJBQ=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2021-10-02T17:19:14Z"
+	}
+}

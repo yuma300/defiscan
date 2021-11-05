@@ -1,0 +1,132 @@
+{
+	"header": {
+		"id": 779857,
+		"chain_id": "kava-4",
+		"block_id": 4825070,
+		"timestamp": "2020-12-23T01:43:10Z"
+	},
+	"data": {
+		"height": "673215",
+		"txhash": "DBA62D48CFBBF334129F879079E5BFD350D2379D5D6A9A1C9ADC4D9FD87BA665",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"delete_harvest_deposit\",\"attributes\":[{\"key\":\"depositor\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"},{\"key\":\"deposit_denom\",\"value\":\"bnb\"},{\"key\":\"deposit_type\",\"value\":\"lp\"}]},{\"type\":\"harvest_withdrawal\",\"attributes\":[{\"key\":\"amount\",\"value\":\"29213977637bnb\"},{\"key\":\"depositor\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"},{\"key\":\"deposit_denom\",\"value\":\"bnb\"},{\"key\":\"deposit_type\",\"value\":\"lp\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"harvest_withdraw\"},{\"key\":\"sender\",\"value\":\"kava16zr7aqvk473073s6a5jgaxus6hx2vn5laum9s3\"},{\"key\":\"module\",\"value\":\"harvest\"},{\"key\":\"sender\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1tnxjszq48g2k737920cchjqwccrqav053c26l0\"},{\"key\":\"sender\",\"value\":\"kava16zr7aqvk473073s6a5jgaxus6hx2vn5laum9s3\"},{\"key\":\"amount\",\"value\":\"29213977637bnb\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "delete_harvest_deposit",
+						"attributes": [
+							{
+								"key": "depositor",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							},
+							{
+								"key": "deposit_denom",
+								"value": "bnb"
+							},
+							{
+								"key": "deposit_type",
+								"value": "lp"
+							}
+						]
+					},
+					{
+						"type": "harvest_withdrawal",
+						"attributes": [
+							{
+								"key": "amount",
+								"value": "29213977637bnb"
+							},
+							{
+								"key": "depositor",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							},
+							{
+								"key": "deposit_denom",
+								"value": "bnb"
+							},
+							{
+								"key": "deposit_type",
+								"value": "lp"
+							}
+						]
+					},
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "harvest_withdraw"
+							},
+							{
+								"key": "sender",
+								"value": "kava16zr7aqvk473073s6a5jgaxus6hx2vn5laum9s3"
+							},
+							{
+								"key": "module",
+								"value": "harvest"
+							},
+							{
+								"key": "sender",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0"
+							},
+							{
+								"key": "sender",
+								"value": "kava16zr7aqvk473073s6a5jgaxus6hx2vn5laum9s3"
+							},
+							{
+								"key": "amount",
+								"value": "29213977637bnb"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "600000",
+		"gas_used": "60753",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "harvest/MsgWithdraw",
+						"value": {
+							"depositor": "kava1tnxjszq48g2k737920cchjqwccrqav053c26l0",
+							"amount": {
+								"denom": "bnb",
+								"amount": "29213977637"
+							},
+							"deposit_type": "lp"
+						}
+					}
+				],
+				"fee": {
+					"amount": [],
+					"gas": "600000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "Ai0LYc99PazJTnef1wqBjeafEVxfdJHCOnInMQb2kHzE"
+						},
+						"signature": "dQgnQULKJJjtkBM0ncfivae11uW0Zdc3DIIhqgUD2pVQSJTAhiJes3BIVxy8L9Mmrq5ddFAXvRj1tmjz9FA30A=="
+					}
+				],
+				"memo": ""
+			}
+		},
+		"timestamp": "2020-12-23T01:43:10Z"
+	}
+}

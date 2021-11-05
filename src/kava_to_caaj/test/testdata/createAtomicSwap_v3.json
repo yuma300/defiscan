@@ -1,0 +1,138 @@
+{
+	"header": {
+		"id": 166318,
+		"chain_id": "kava-3",
+		"block_id": 3712263,
+		"timestamp": "2020-09-08T05:34:28Z"
+	},
+	"data": {
+		"height": "1113372",
+		"txhash": "39E4B07236B3A54208D57EF643F4343B1C1B5ACB5326719B4BB4DE3B505EA2F7",
+		"raw_log": "[{\"msg_index\":0,\"log\":\"\",\"events\":[{\"type\":\"create_atomic_swap\",\"attributes\":[{\"key\":\"sender\",\"value\":\"kava1x8cy4tfcxzywqwenttjswlv6x8swhc6hz2xfxq\"},{\"key\":\"recipient\",\"value\":\"kava1r4v2zdhdalfj2ydazallqvrus9fkphmglhn6u6\"},{\"key\":\"atomic_swap_id\",\"value\":\"5af7a3d2e04564b349152614429f8a347e90a75f231a5bc5eaf5cf95615d7aa6\"},{\"key\":\"random_number_hash\",\"value\":\"144c751d7272847ce72eccc7c7772cb87f169698bd5454e319d385991c617d1d\"},{\"key\":\"timestamp\",\"value\":\"1599543258\"},{\"key\":\"sender_other_chain\",\"value\":\"bnb1jh7uv2rm6339yue8k4mj9406k3509kr4wt5nxn\"},{\"key\":\"expire_height\",\"value\":\"1113622\"},{\"key\":\"amount\",\"value\":\"19950000bnb\"},{\"key\":\"direction\",\"value\":\"Outgoing\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"createAtomicSwap\"},{\"key\":\"sender\",\"value\":\"kava1x8cy4tfcxzywqwenttjswlv6x8swhc6hz2xfxq\"},{\"key\":\"module\",\"value\":\"bep3\"},{\"key\":\"sender\",\"value\":\"kava1x8cy4tfcxzywqwenttjswlv6x8swhc6hz2xfxq\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"kava1eyugkwc74zejgwdwl7mvm7pad4hzdnka4wmdmu\"},{\"key\":\"amount\",\"value\":\"19950000bnb\"}]}]}]",
+		"logs": [
+			{
+				"msg_index": 0,
+				"log": "",
+				"events": [
+					{
+						"type": "create_atomic_swap",
+						"attributes": [
+							{
+								"key": "sender",
+								"value": "kava1x8cy4tfcxzywqwenttjswlv6x8swhc6hz2xfxq"
+							},
+							{
+								"key": "recipient",
+								"value": "kava1r4v2zdhdalfj2ydazallqvrus9fkphmglhn6u6"
+							},
+							{
+								"key": "atomic_swap_id",
+								"value": "5af7a3d2e04564b349152614429f8a347e90a75f231a5bc5eaf5cf95615d7aa6"
+							},
+							{
+								"key": "random_number_hash",
+								"value": "144c751d7272847ce72eccc7c7772cb87f169698bd5454e319d385991c617d1d"
+							},
+							{
+								"key": "timestamp",
+								"value": "1599543258"
+							},
+							{
+								"key": "sender_other_chain",
+								"value": "bnb1jh7uv2rm6339yue8k4mj9406k3509kr4wt5nxn"
+							},
+							{
+								"key": "expire_height",
+								"value": "1113622"
+							},
+							{
+								"key": "amount",
+								"value": "19950000bnb"
+							},
+							{
+								"key": "direction",
+								"value": "Outgoing"
+							}
+						]
+					},
+					{
+						"type": "message",
+						"attributes": [
+							{
+								"key": "action",
+								"value": "createAtomicSwap"
+							},
+							{
+								"key": "sender",
+								"value": "kava1x8cy4tfcxzywqwenttjswlv6x8swhc6hz2xfxq"
+							},
+							{
+								"key": "module",
+								"value": "bep3"
+							},
+							{
+								"key": "sender",
+								"value": "kava1x8cy4tfcxzywqwenttjswlv6x8swhc6hz2xfxq"
+							}
+						]
+					},
+					{
+						"type": "transfer",
+						"attributes": [
+							{
+								"key": "recipient",
+								"value": "kava1eyugkwc74zejgwdwl7mvm7pad4hzdnka4wmdmu"
+							},
+							{
+								"key": "amount",
+								"value": "19950000bnb"
+							}
+						]
+					}
+				]
+			}
+		],
+		"gas_wanted": "300000",
+		"gas_used": "135197",
+		"tx": {
+			"type": "cosmos-sdk/StdTx",
+			"value": {
+				"msg": [
+					{
+						"type": "bep3/MsgCreateAtomicSwap",
+						"value": {
+							"from": "kava1x8cy4tfcxzywqwenttjswlv6x8swhc6hz2xfxq",
+							"to": "kava1r4v2zdhdalfj2ydazallqvrus9fkphmglhn6u6",
+							"recipient_other_chain": "bnb186srkq62kmad0vu80pjeu5sv4mz6gsr5343hyx",
+							"sender_other_chain": "bnb1jh7uv2rm6339yue8k4mj9406k3509kr4wt5nxn",
+							"random_number_hash": "144C751D7272847CE72ECCC7C7772CB87F169698BD5454E319D385991C617D1D",
+							"timestamp": "1599543258",
+							"amount": [
+								{
+									"denom": "bnb",
+									"amount": "19950000"
+								}
+							],
+							"height_span": "250"
+						}
+					}
+				],
+				"fee": {
+					"amount": [],
+					"gas": "300000"
+				},
+				"signatures": [
+					{
+						"pub_key": {
+							"type": "tendermint/PubKeySecp256k1",
+							"value": "A4ZDgmSYxcsJbgtd0BipMWf1HO0bCIrGf/qyiXhPHw13"
+						},
+						"signature": "sAw8W/5cyuWSR3t/Asb0bU89AP50fRtNRR18z1LQxzlkAl/eTKLd1ePPaKJ/MMkdSlJ2xgtTyAkG/NlYy5hrDA=="
+					}
+				],
+				"memo": "Transfer BNB to Binance Chain from Kava Chain via Frontier Wallet "
+			}
+		},
+		"timestamp": "2020-09-08T05:34:28Z"
+	}
+}
