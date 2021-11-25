@@ -1,5 +1,5 @@
 import unittest
-from caaj_to_cryptact.caaj_file_handler import *
+from src.caaj_to_cryptact.caaj_file_handler import *
 import os
 
 class TestCaajFileHandler(unittest.TestCase):

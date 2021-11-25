@@ -33,4 +33,9 @@ class CaajLine:
     self.credit_to = line[CaajLine.CREDIT_TO]
     self.comment = line[CaajLine.COMMENT]
 
+  def get_json(self):
+    return {'time': self.time, 'platform': self.platform, 'transaction_id': self.transaction_id, 
+      'debit_title': self.debit_title, 'debit_amount': self.debit_amount, 'debit_from': self.debit_from, 
+      'debit_to': self.debit_to, 'credit_title': self.credit_title, 'credit_amount': self.credit_amount, 
+      'credit_from': self.credit_from, 'credit_to': self.credit_to, 'comment': self.comment}
 

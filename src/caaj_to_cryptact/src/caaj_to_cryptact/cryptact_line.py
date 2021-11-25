@@ -21,14 +21,14 @@ class CryptactLine:
   
   def get_dict(self):
     line = {}
-    line['timestamp'] = self.timestamp
-    line['action'] = self.action   
-    line['source'] = self.source   
-    line['base']   = self.base   
-    line['volume'] = self.volume   
-    line['price'] = self.price   
-    line['counter'] = self.counter   
-    line['fee'] = self.fee   
-    line['feeccy'] = self.feeccy   
-    line['comment'] = self.comment   
+    line['Timestamp'] = self.timestamp
+    line['Action'] = self.action   
+    line['Source'] = self.source   
+    line['Base']   = self.base   
+    line['Volume'] = self.volume   
+    line['Price'] = self.price   
+    line['Counter'] = self.counter   
+    line['Fee'] = self.fee   
+    line['FeeCcy'] = self.feeccy   
+    line['Comment'] = self.comment   
     return line

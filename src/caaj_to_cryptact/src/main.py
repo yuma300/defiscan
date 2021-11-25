@@ -1,11 +1,11 @@
-import requests
-import time
 import sys
 import logging
 from decimal import *
 from datetime import datetime as dt
-import pandas as pd
 import os
+from caaj_to_cryptact.caaj_file_handler import *
+from caaj_to_cryptact.caaj_to_cryptact import CaajToCryptact
+from caaj_to_cryptact.cryptact_file_handler import CryptactFileHandler
 
 logger = logging.getLogger(name=__name__)
 logger.addHandler(logging.NullHandler())
@@ -21,36 +21,35 @@ def set_root_logger():
       stream_handler.setFormatter(fmt)
       root_logger.addHandler(stream_handler)
 
-def output_caaj(caajs, address):
-  df = pd.DataFrame(caajs)
-  df = df.sort_values('time')
-  result_file_name = f'{os.path.dirname(__file__)}/../output/kava_caaj_{address}.csv'
-  df.to_csv(result_file_name, index=False, columns=['time', 'platform', 'transaction_id', 'debit_title', 'debit_amount', 'debit_from', 'debit_to', 'credit_title', 'credit_amount', 'credit_from', 'credit_to', 'comment'])
+def read_config():
+  f = open(".env.json","r")
+  env_dict = json.load(f)
+  return env_dict
+
+def get_caaj_file_path():
+  if "KAVA_WALLET_ADDRESS" in os.environ:
+    return os.environ["CAAJ_FILE_PATH"].split(",")
+  elif os.path.exists(os.getcwd()+"/.env.json"):
+    return read_config()["caaj_file_path"]
+  else:
+    return sys.argv[1].split(",")
 
 def main():
-  kava = KavaPlugin()
-  caajs = []
-  print('start kava_to_caaj')
-  
-  address = sys.argv[1]
-  num_transactions = 50 
-  last_id = 0
-  while num_transactions >= 50:
-    time.sleep(5)
-    response = requests.get(
-        'https://api-kava.cosmostation.io/v1/account/new_txs/%s' % address,
-        params={'from': last_id, 'limit': 50})
-    transactions = response.json()
-    num_transactions = len(transactions)
-    for transaction in transactions:
-      last_id = transaction['header']['id']
-      if kava.can_handle(transaction) == False:
-        raise ValueError('not kava transaction')
-      caajs.extend(kava.get_caajs(transaction, address))
+  logger.info('start caaj_to_cryptact')
+  caaj_file_paths = get_caaj_file_path()
+  cryptact_lines_all = []
+  for caaj_file_path in caaj_file_paths:
+    caaj_lines = CaajFileHandler.get_caaj_lines(caaj_file_path)
+    for i, caaj_line in enumerate(caaj_lines):
+      try:
+        cryptact_lines = CaajToCryptact.convert(caaj_line)
+        cryptact_lines_all.extend(cryptact_lines) if cryptact_lines is not None else None
+      except ValueError as e:
+        logger.error(f'caaj file line no. {i}')
+        raise e
 
-  output_caaj(caajs, address)
+  CryptactFileHandler.write_cryptact_lines(cryptact_lines_all)
 
 if __name__== '__main__':
   set_root_logger()
   main()
-
