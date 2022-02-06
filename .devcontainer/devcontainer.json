@@ -1,0 +1,12 @@
+{
+    "name": "defiscan",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "defiscan",
+    "workspaceFolder": "/app",
+    "shutdownAction": "stopCompose",
+	"extensions": [
+		"ms-python.python"
+	]
+}

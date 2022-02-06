@@ -5,6 +5,6 @@ services:
     container_name: defiscan
     build: ./
     volumes:
-      - ./src:/app
+      - ./:/app
     command: /bin/bash
     tty: true

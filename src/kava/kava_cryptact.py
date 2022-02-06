@@ -10,6 +10,7 @@ import os
 import logging
 import re
 from typing import Union
+from pathlib import Path
 
 logger = logging.getLogger(name=__name__)
 logger.addHandler(logging.NullHandler())
@@ -80,8 +81,13 @@ def split_amount(value:str)-> Union[Decimal, str]:
 
 def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
   results = []
-  tx_msg = transaction['data']['tx']['value']['msg'][0]
-  action = tx_msg['type']
+  chain_id = transaction['header']['chain_id']
+  if chain_id == 'kava-9':
+    tx_msg = transaction['data']['tx']['body']['messages'][0]
+    action = tx_msg['@type']
+  else:
+    tx_msg = transaction['data']['tx']['value']['msg'][0]
+    action = tx_msg['type']
   txhash = transaction['data']['txhash']
   events = transaction['data']['logs'][0]['events']
   if action == 'cdp/MsgCreateCDP':
@@ -108,9 +114,13 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
       raise e
 
     results.append({'Timestamp': timestamp, 'Source': 'kava', 'Action': 'BORROW', 'Base': 'USDX', 'Volume': debt_amount, 'Price': 110, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'cdp draw https://www.mintscan.io/kava/txs/%s' % txhash})
-  elif action == 'cdp/MsgRepayDebt':
-    collateral_token = tx_msg['value']['collateral_type']
-    repay_amount = Decimal(tx_msg['value']['payment']['amount'])/ Decimal('1000000')
+  elif action in ['cdp/MsgRepayDebt', '/kava.cdp.v1beta1.MsgRepayDebt']:
+    if chain_id == 'kava-9':
+      collateral_token = tx_msg['collateral_type']
+      repay_amount = Decimal(tx_msg['payment']['amount'])/ Decimal('1000000')
+    else:
+      collateral_token = tx_msg['value']['collateral_type']
+      repay_amount = Decimal(tx_msg['value']['payment']['amount'])/ Decimal('1000000')
     try:
       cdp = list(filter(lambda item: item['collateral_token'] == collateral_token, cdp_trucker))[0]
       if len(list(filter(lambda item: item['type'] == 'cdp_close', events))) != 0: # check wether close or not
@@ -135,9 +145,13 @@ def cdp_tracking(cdp_trucker, transaction, fee, timestamp):
     except IndexError as e:
       logger.critical('cdp/MsgRepayDebt. CDP does not exist!!!!!!')
       raise e
-  elif action == 'cdp/MsgWithdraw':
-    collateral_token = tx_msg['value']['collateral_type']
-    collateral_amount = Decimal(tx_msg['value']['collateral']['amount'])/ Decimal('100000000')
+  elif action in ['cdp/MsgWithdraw', '/kava.cdp.v1beta1.MsgWithdraw']:
+    if chain_id == 'kava-9':
+      collateral_token = tx_msg['collateral_type']
+      collateral_amount = Decimal(tx_msg['collateral']['amount'])/ Decimal('100000000')
+    else:
+      collateral_token = tx_msg['value']['collateral_type']
+      collateral_amount = Decimal(tx_msg['value']['collateral']['amount'])/ Decimal('100000000')
     try:
       cdp = list(filter(lambda item: item['collateral_token'] == collateral_token, cdp_trucker))[0]
       if cdp['collateral_amount'] - Decimal(collateral_amount) < 0: # check total withdraw amount is not bigger than collateral
@@ -180,7 +194,7 @@ def create_cryptact_csv(address):
   results = []
   transactions = []
   decoder = json.JSONDecoder()
-  read_file_name = 'transactions_%s.txt' % address
+  read_file_name = '%s/transactions_%s.txt' % (os.path.dirname(__file__), address)
   with open(read_file_name, 'r') as f:
     line = f.readline()
     while line:
@@ -200,7 +214,10 @@ def create_cryptact_csv(address):
     txhash = transaction['data']['txhash']
     fee = 0
     try:
-      fee = transaction['data']['tx']['value']['fee']['amount'][0]['amount']
+      if chain_id == 'kava-9':
+        fee = transaction['data']['tx']['auth_info']['fee']['amount'][0]['amount']
+      else:
+        fee = transaction['data']['tx']['value']['fee']['amount'][0]['amount']
       fee = Decimal(fee) / Decimal('1000000')
     except IndexError as e:
       logger.critical('this time has no fee.')
@@ -237,16 +254,16 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
     logger.info('draw_cdp')
   elif action == 'deposit_cdp':
     logger.info('deposit_cdp')
-  elif action == 'repay_cdp':
+  elif action in ['repay_cdp', '/kava.cdp.v1beta1.MsgRepayDebt']:
     logger.info('repay_cdp')
-  elif action == 'withdraw_cdp':
+  elif action in ['withdraw_cdp', '/kava.cdp.v1beta1.MsgWithdraw']:
     logger.info('withdraw_cdp')
   elif action == 'claimAtomicSwap':
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'atomic swap fee'})
-  elif action in ['claim_hard_reward', 'claim_harvest_reward']:
+  elif action in ['claim_hard_reward', 'claim_harvest_reward', '/kava.incentive.v1beta1.MsgClaimHardReward']:
     transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
-    if chain_id == 'kava-8':
+    if chain_id in ['kava-8', 'kava-9']:
       amounts = list(filter(lambda item: item['key'] == 'amount', transfer['attributes']))
       amounts =  list(map(lambda item: item['value'], amounts))
     else:
@@ -268,9 +285,9 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
     amount = list(filter(lambda item: item['key'] == 'amount', transfer['attributes']))[0]['value']
     amount = Decimal(amount.replace('ukava', '')) / Decimal('1000000')
     results.append({'Action': 'LENDING', 'Base': 'KAVA', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim kava usdx minting reward'})
-  elif action == 'claim_delegator_reward':
+  elif action in ['claim_delegator_reward', '/kava.incentive.v1beta1.MsgClaimDelegatorReward']:
     transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
-    if chain_id == 'kava-8':
+    if chain_id in ['kava-8', 'kava-9']:
       amounts = list(filter(lambda item: item['key'] == 'amount', transfer['attributes']))
       amounts =  list(map(lambda item: item['value'], amounts))
     else:
@@ -290,13 +307,13 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
       results.append({'Action': 'STAKING', 'Base': 'SWP', 'Volume': swp_amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim delegator reward'})
     except IndexError as e:
       logger.critical('no SWP reward on delegator')
-  elif action == 'createAtomicSwap':
+  elif action in ['createAtomicSwap', '/kava.bep3.v1beta1.MsgCreateAtomicSwap']:
     if fee == 0: return results
     message_attributes = list(filter(lambda item: item['type'] == 'message', events))[0]['attributes']
     sender = list(filter(lambda item: item['key'] == 'sender', message_attributes))[0]['value']
     if sender != address: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'atomic swap fee'})
-  elif action in ['delegate','withdraw_delegator_reward']:
+  elif action in ['delegate','withdraw_delegator_reward', '/cosmos.staking.v1beta1.MsgDelegate','/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward']:
     try:
       transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
       amount = list(filter(lambda item: item['key'] == 'amount', transfer['attributes']))[0]['value']
@@ -311,13 +328,13 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
   elif action in ['hard_deposit', 'harvest_deposit']:
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'hard deposit'})
-  elif action in ['hard_withdraw', 'harvest_withdraw']:
+  elif action in ['hard_withdraw', 'harvest_withdraw', '/kava.hard.v1beta1.MsgWithdraw']:
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'hard withdraw'})
   elif action == 'refundAtomicSwap':
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'refund atomic swap'})
-  elif action == 'send':
+  elif action in ['send', '/cosmos.bank.v1beta1.MsgSend']:
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'send'})
   elif action == 'begin_unbonding':
@@ -357,7 +374,7 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
       amount = amount - debut_amount # repay = all - debut
     if amount > Decimal(0):
       results.append({'Action': 'RETURN', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'hard repay'})
-  elif action in ['swap_exact_for_tokens','swap_for_exact_tokens']:
+  elif action in ['swap_exact_for_tokens','swap_for_exact_tokens', '/kava.swap.v1beta1.MsgSwapExactForTokens']:
     logger.info(action)
     swap_trade = list(filter(lambda item: item['type'] == 'swap_trade', events))[0]
     logger.debug(swap_trade)
