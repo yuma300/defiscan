@@ -37,9 +37,13 @@ def get_transactions(address):
   f = open(file_name, 'w')
   while num_transactions >= 50:
     time.sleep(5)
+    headers = {
+        "Origin": "https://www.mintscan.io",
+        "Referer": "https://www.mintscan.io/",
+    }  # workaround from 2022-04-25: both origin and referer headers are required
     response = requests.get(
         'https://api-kava.cosmostation.io/v1/account/new_txs/%s' % address,
-        params={'from': last_id, 'limit': 50})
+        params={'from': last_id, 'limit': 50}, headers=headers)
     transactions = response.json()
     num_transactions = len(transactions)
     #print(num_transactions)
