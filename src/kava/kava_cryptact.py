@@ -322,7 +322,7 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
       results.append({'Action': 'STAKING', 'Base': 'KAVA', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim staking reward'})
     except IndexError as e:
       logger.critical('this time. no auto claim reward.')
-  elif action in ['begin_redelegate']:
+  elif action in ['begin_redelegate', '/cosmos.staking.v1beta1.MsgBeginRedelegate']:
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'begin_redelegate'})
   elif action in ['hard_deposit', 'harvest_deposit']:
@@ -337,7 +337,7 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
   elif action in ['send', '/cosmos.bank.v1beta1.MsgSend']:
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'send'})
-  elif action == 'begin_unbonding':
+  elif action in ['begin_unbonding', '/cosmos.staking.v1beta1.MsgUndelegate']:
     try:
       transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
       amount = list(filter(lambda item: item['key'] == 'amount', transfer['attributes']))[0]['value']
@@ -455,7 +455,7 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
     logger.debug(f"claim amount : {amount} {currency}")
     results.append({'Action': 'BONUS', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'Claim Swap Reward'})
   else:
-    raise ValueError('%s: this is undefined action ...' % action)
+      raise ValueError('%s: this is undefined action .... %s: txhash' % (action, txhash))
 
   results = list(map(lambda item: item|{'Timestamp': timestamp, 'Source': 'kava', 'Comment': item['Comment'] + ' https://www.mintscan.io/kava/txs/%s' % txhash}, results))
   #logger.debug(results)
