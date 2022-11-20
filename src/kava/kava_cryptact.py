@@ -323,8 +323,13 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
     except IndexError as e:
       logger.critical('this time. no auto claim reward.')
   elif action in ['begin_redelegate', '/cosmos.staking.v1beta1.MsgBeginRedelegate']:
-    if fee == 0: return results
-    results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'begin_redelegate'})
+      transfer = list(filter(lambda item: item['type'] == 'transfer', events))[0]
+      amount = list(filter(lambda item: item['key'] == 'amount', transfer['attributes']))[0]['value']
+      amount = list(filter(lambda item: 'ukava' in item, amount.split(',')))[0]
+      amount = Decimal(amount.replace('ukava', '')) / Decimal('1000000')
+      results.append({'Action': 'STAKING', 'Base': 'KAVA', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim staking reward with redelegate'})
+    #if fee == 0: return results
+    #results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'begin_redelegate'})
   elif action in ['hard_deposit', 'harvest_deposit']:
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'hard deposit'})
@@ -343,7 +348,7 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
       amount = list(filter(lambda item: item['key'] == 'amount', transfer['attributes']))[0]['value']
       amount = list(filter(lambda item: 'ukava' in item, amount.split(',')))[0]
       amount = Decimal(amount.replace('ukava', '')) / Decimal('1000000')
-      results.append({'Action': 'STAKING', 'Base': 'KAVA', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim staking reward'})
+      results.append({'Action': 'STAKING', 'Base': 'KAVA', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': 'claim staking reward with unbonding'})
     except IndexError as e:
       logger.critical('this time. no auto claim reward.')
   elif action == 'vote':
