@@ -161,7 +161,7 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
 
 
 
-def ClaimAtomicSwap(fee,results):
+def ClaimAtomicSwap(fee):
   results = []
   if fee == 0: return results
   results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'atomic swap fee'})

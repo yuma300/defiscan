@@ -64,14 +64,17 @@ def create_cryptact_csv(address):
   with open(read_file_name, 'r') as f:
     line = f.readline()
     while line:
-      transactions.append(json.loads(line))
+      line = json.loads(line)
+      if "code" in line["data"] and line["data"]["code"] != 0:
+        logger.debug(f"this transaction is error hash: {line['data']['txhash']}")
+      else:
+        transactions.append(line)
       line = f.readline()
   transactions.reverse()
 
   cdp_trucker = []
   #logger.debug(address)
   for transaction in transactions:
-    #transaction = json.loads(transaction)
     #logger.debug(transaction)
     logger.debug(json.dumps(transaction['header'], indent=2))
     #logger.debug(json.dumps(transaction, indent=2))
