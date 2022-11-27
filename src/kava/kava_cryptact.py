@@ -5,13 +5,12 @@ import json
 from decimal import Decimal
 import pandas as pd
 from scan import action
-from datetime import datetime as dt
+from datetime import datetime as dt, timedelta, timezone
 import re
 import os
 import logging
 import re
 from typing import Union
-from pathlib import Path
 from scan import kava8, kava9
 
 logger = logging.getLogger(name=__name__)
@@ -64,19 +63,24 @@ def create_cryptact_csv(address):
   with open(read_file_name, 'r') as f:
     line = f.readline()
     while line:
-      transactions.append(json.loads(line))
+      line = json.loads(line)
+      if "code" in line["data"] and line["data"]["code"] != 0:
+        logger.debug(f"this transaction is error hash: {line['data']['txhash']}")
+      else:
+        transactions.append(line)
       line = f.readline()
   transactions.reverse()
 
   cdp_trucker = []
   #logger.debug(address)
   for transaction in transactions:
-    #transaction = json.loads(transaction)
     #logger.debug(transaction)
     logger.debug(json.dumps(transaction['header'], indent=2))
     #logger.debug(json.dumps(transaction, indent=2))
     chain_id = transaction['header']['chain_id']
-    timestamp = dt.strptime(transaction['header']['timestamp'], '%Y-%m-%dT%H:%M:%SZ')
+    timestamp_utc = dt.strptime(transaction['header']['timestamp'], '%Y-%m-%dT%H:%M:%SZ')
+    timestamp_jst = timestamp_utc.astimezone(timezone(timedelta(hours=+9)))
+    timestamp = dt.strftime(timestamp_jst, '%Y-%m-%d %H:%M:%S')
     txhash = transaction['data']['txhash']
     fee = 0
     # before kava8

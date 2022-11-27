@@ -116,7 +116,8 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
     results += Delegate(events,fee)
   elif action in ['begin_redelegate', '/cosmos.staking.v1beta1.MsgBeginRedelegate']:
     if fee == 0: return results
-    results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'begin_redelegate'})
+    results += Delegate(events,fee)
+    results[0]["Comment"] = 'begin_redelegate'
   elif action in ['hard_deposit', 'harvest_deposit', '/kava.hard.v1beta1.MsgDeposit']:
     if fee == 0: return results
     results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'hard deposit'})
@@ -161,7 +162,7 @@ def classify(timestamp, events, fee, txhash, address, chain_id):
 
 
 
-def ClaimAtomicSwap(fee,results):
+def ClaimAtomicSwap(fee):
   results = []
   if fee == 0: return results
   results.append({'Action': 'SENDFEE', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': 'atomic swap fee'})
