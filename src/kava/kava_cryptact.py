@@ -1,3 +1,5 @@
+import imp
+from multiprocessing.sharedctypes import Value
 import sys
 import json
 from decimal import Decimal
@@ -9,10 +11,11 @@ import os
 import logging
 import re
 from typing import Union
-
+from financial_tools.balance_sheet import BalanceSeet
 
 logger = logging.getLogger(name=__name__)
 logger.addHandler(logging.NullHandler())
+balance_sheet = BalanceSeet()
 
 def set_root_logger():
   root_logget = logging.getLogger(name=None)
@@ -52,6 +55,24 @@ def split_amount(value:str)-> Union[Decimal, str]:
   amount = Decimal(amount) / Decimal(str(10**currency_mapping[currency]["precision"]))
   currency = currency_mapping[currency]["Name"]
   return amount,currency
+
+
+def get_fee(transaction: dict) -> Decimal:
+  fee = Decimal("0")
+  try:
+    if transaction['header']['chain_id'] in ['kava-9', 'kava_2222-10']:
+      if len(transaction['data']["tx"]["auth_info"]["fee"]["amount"]) == 1:
+        fee = Decimal(transaction['data']["tx"]["auth_info"]["fee"]["amount"][0]["amount"]) / Decimal("1000000")
+      elif len(transaction['data']["tx"]["auth_info"]["fee"]["amount"]) > 1:
+        raise ValueError(f"invalid fee data")
+    else:
+      if len(transaction['data']["tx"]["value"]["fee"]["amount"]) == 1:
+        fee = Decimal(transaction['data']["tx"]["value"]["fee"]["amount"][0]["amount"]) / Decimal("1000000")
+      elif len(transaction['data']["tx"]["value"]["fee"]["amount"]) > 1:
+        raise ValueError(f"invalid fee data")
+  except Exception as e:
+    raise ValueError(json.dumps(transaction, indent=2))
+  return fee
 
 def get_event(events: dict, type: str):
   event = list(filter(lambda x: x["type"] == type, events))
@@ -95,7 +116,7 @@ def create_cryptact_csv(address):
     timestamp = timestamp.astimezone(datetime.timezone(datetime.timedelta(hours=+9)))
     timestamp = datetime.datetime.strftime(timestamp, '%Y-%m-%d %H:%M:%S')
     txhash = transaction['data']['txhash']
-    fee = 0
+    fee = get_fee(transaction)
     raw_logs = json.loads(transaction['data']['raw_log'])
     for raw_log in raw_logs:
       message_event = get_event(raw_log["events"], "message")
@@ -108,10 +129,33 @@ def create_cryptact_csv(address):
         receiver_address = get_attribute(transfer_event["attributes"], "recipient")["value"]
         if sender_address == receiver_address:
           results.append({'Timestamp': timestamp, 'Action': 'SENDFEE', 'Source': 'kava', 'Source': 'kava', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'self transfer https://www.mintscan.io/kava/txs/{txhash}'})
+          balance_sheet.put_spot_balance_sheet("KAVA", -fee)
         elif sender_address == address:
           results.append({'Timestamp': timestamp, 'Action': 'CONFIRM', 'Source': 'kava', 'Base': currency, 'Volume': - amount, 'Price': 0, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'send https://www.mintscan.io/kava/txs/{txhash}'})
+          balance_sheet.put_spot_balance_sheet(currency, - amount)
+          balance_sheet.put_spot_balance_sheet("KAVA", - fee)
         elif receiver_address == address:
-          results.append({'Timestamp': timestamp, 'Action': 'CONFIRM', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': 0, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'receive https://www.mintscan.io/kava/txs/{txhash}'})
+          results.append({'Timestamp': timestamp, 'Action': 'CONFIRM', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': 0, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'receive https://www.mintscan.io/kava/txs/{txhash}'})
+          balance_sheet.put_spot_balance_sheet(currency, amount)
+      elif action in ["createAtomicSwap", "claimAtomicSwap", "/kava.bep3.v1beta1.MsgCreateAtomicSwap", "/kava.bep3.v1beta1.MsgClaimAtomicSwap"]:
+        try:
+          create_atomic_event = get_event(raw_log["events"], "transfer")
+        except Exception as e:
+          continue
+        amount = get_attribute(create_atomic_event["attributes"], "amount")["value"]
+        amount, currency = split_amount(amount)
+        sender_address = get_attribute(create_atomic_event["attributes"], "sender")["value"]
+        receiver_address = get_attribute(create_atomic_event["attributes"], "recipient")["value"]
+        if sender_address == receiver_address:
+          results.append({'Timestamp': timestamp, 'Action': 'SENDFEE', 'Source': 'kava', 'Source': 'kava', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'self transfer https://www.mintscan.io/kava/txs/{txhash}'})
+          balance_sheet.put_spot_balance_sheet("KAVA", -fee)
+        elif sender_address == address:
+          results.append({'Timestamp': timestamp, 'Action': 'CONFIRM', 'Source': 'kava', 'Base': currency, 'Volume': - amount, 'Price': 0, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'send https://www.mintscan.io/kava/txs/{txhash}'})
+          balance_sheet.put_spot_balance_sheet(currency, - amount)
+          balance_sheet.put_spot_balance_sheet("KAVA", - fee)
+        elif receiver_address == address:
+          results.append({'Timestamp': timestamp, 'Action': 'CONFIRM', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': 0, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'receive https://www.mintscan.io/kava/txs/{txhash}'})
+          balance_sheet.put_spot_balance_sheet(currency, amount)
       elif action in ["create_cdp", "/kava.cdp.v1beta1.MsgCreateCDP"]:
         transfer_event = get_event(raw_log["events"], "transfer")
         amounts = list(filter(lambda x: x["key"] == "amount", transfer_event["attributes"]))
@@ -121,23 +165,34 @@ def create_cryptact_csv(address):
           amount, currency = split_amount(amount["value"])
           if currency.lower() == "usdx":
             results.append({'Timestamp': timestamp, 'Action': 'BORROW', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'cdp create https://www.mintscan.io/kava/txs/{txhash}'})
+            balance_sheet.put_borrow_balance_sheet(currency, amount)
+            balance_sheet.put_spot_balance_sheet("KAVA", -fee)
           else:
-            results.append({'Timestamp': timestamp, 'Action': 'LEND', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'cdp create https://www.mintscan.io/kava/txs/{txhash}'})
+            lend_result = balance_sheet.put_lend_balance_sheet(currency, amount)
+            results.append({'Timestamp': timestamp, 'Action': 'LEND', 'Source': 'kava', 'Base': currency, 'Volume': lend_result[0], 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'cdp create https://www.mintscan.io/kava/txs/{txhash}'})
       elif action in ["deposit_cdp", "/kava.cdp.v1beta1.MsgDeposit"]:
         transfer_event = get_event(raw_log["events"], "transfer")
         amount = get_attribute(transfer_event["attributes"], "amount")["value"]
         amount, currency = split_amount(amount)
-        results.append({'Timestamp': timestamp, 'Action': 'LEND', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'cdp deposit https://www.mintscan.io/kava/txs/{txhash}'})
+        lend_result = balance_sheet.put_lend_balance_sheet(currency, amount)
+        results.append({'Timestamp': timestamp, 'Action': 'LEND', 'Source': 'kava', 'Base': currency, 'Volume': lend_result[0], 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'cdp deposit https://www.mintscan.io/kava/txs/{txhash}'})
+        balance_sheet.put_spot_balance_sheet("KAVA", -fee)
       elif action in ["draw_cdp", "/kava.cdp.v1beta1.MsgDrawDebt", "/kava.hard.v1beta1.MsgBorrow"]:
         transfer_event = get_event(raw_log["events"], "transfer")
         amount = get_attribute(transfer_event["attributes"], "amount")["value"]
         amount, currency = split_amount(amount)
         results.append({'Timestamp': timestamp, 'Action': 'BORROW', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'cdp draw https://www.mintscan.io/kava/txs/{txhash}'})
+        balance_sheet.put_borrow_balance_sheet(currency, amount)
+        balance_sheet.put_spot_balance_sheet("KAVA", -fee)
       elif action in ["withdraw_cdp", "/kava.cdp.v1beta1.MsgWithdraw"]:
         transfer_event = get_event(raw_log["events"], "transfer")
         amount = get_attribute(transfer_event["attributes"], "amount")["value"]
         amount, currency = split_amount(amount)
-        results.append({'Timestamp': timestamp, 'Action': 'RECOVER', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'cdp withdraw https://www.mintscan.io/kava/txs/{txhash}'})
+        lend_result = balance_sheet.put_lend_balance_sheet(currency, -amount)
+        results.append({'Timestamp': timestamp, 'Action': 'RECOVER', 'Source': 'kava', 'Base': currency, 'Volume': lend_result[0], 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'cdp withdraw https://www.mintscan.io/kava/txs/{txhash}'})
+        if lend_result[1] != Decimal("0.0"):
+          results.append({'Timestamp': timestamp, 'Action': 'BONUS', 'Source': 'kava', 'Base': currency, 'Volume': lend_result[1], 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'lend interest https://www.mintscan.io/kava/txs/{txhash}'})
+        balance_sheet.put_spot_balance_sheet("KAVA", -fee)
       elif action in ["repay_cdp", "/kava.cdp.v1beta1.MsgRepayDebt"]:
         transfer_event = get_event(raw_log["events"], "transfer")
         amounts = list(filter(lambda x: x["key"] == "amount", transfer_event["attributes"]))
@@ -146,24 +201,41 @@ def create_cryptact_csv(address):
         for amount in amounts:
           amount, currency = split_amount(amount["value"])
           if action in ["repay_cdp", "/kava.cdp.v1beta1.MsgRepayDebt"] and currency.lower() == "usdx":
-            results.append({'Timestamp': timestamp, 'Action': 'RETURN', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'cdp repay https://www.mintscan.io/kava/txs/{txhash}'})
+            borrow_result = balance_sheet.put_borrow_balance_sheet(currency, -amount)
+            results.append({'Timestamp': timestamp, 'Action': 'RETURN', 'Source': 'kava', 'Base': currency, 'Volume': borrow_result[0], 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'cdp repay https://www.mintscan.io/kava/txs/{txhash}'})
+            if borrow_result[1] != Decimal("0.0"):
+              results.append({'Timestamp': timestamp, 'Action': 'PAY', 'Source': 'kava', 'Base': currency, 'Volume': borrow_result[1], 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'borrow interest https://www.mintscan.io/kava/txs/{txhash}'})
+            balance_sheet.put_spot_balance_sheet("KAVA", -fee)
           else:
-            results.append({'Timestamp': timestamp, 'Action': 'RECOVER', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'cdp repay https://www.mintscan.io/kava/txs/{txhash}'})
+            lend_result = balance_sheet.put_lend_balance_sheet(currency, -amount)
+            results.append({'Timestamp': timestamp, 'Action': 'RECOVER', 'Source': 'kava', 'Base': currency, 'Volume': lend_result[0], 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'cdp repay https://www.mintscan.io/kava/txs/{txhash}'})
+            if lend_result[1] != Decimal("0.0"):
+              results.append({'Timestamp': timestamp, 'Action': 'BONUS', 'Source': 'kava', 'Base': currency, 'Volume': lend_result[1], 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'lend interest https://www.mintscan.io/kava/txs/{txhash}'})
       elif action in ["/kava.hard.v1beta1.MsgRepay"]:
         transfer_event = get_event(raw_log["events"], "transfer")
         amount = get_attribute(transfer_event["attributes"], "amount")["value"]
         amount, currency = split_amount(amount)
-        results.append({'Timestamp': timestamp, 'Action': 'RETURN', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'cdp repay https://www.mintscan.io/kava/txs/{txhash}'})
+        borrow_result = balance_sheet.put_borrow_balance_sheet(currency, -amount)
+        results.append({'Timestamp': timestamp, 'Action': 'RETURN', 'Source': 'kava', 'Base': currency, 'Volume': borrow_result[0], 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'cdp repay https://www.mintscan.io/kava/txs/{txhash}'})
+        if borrow_result[1] != Decimal("0.0"):
+          results.append({'Timestamp': timestamp, 'Action': 'PAY', 'Source': 'kava', 'Base': currency, 'Volume': borrow_result[1], 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'borrow interest https://www.mintscan.io/kava/txs/{txhash}'})
+        balance_sheet.put_spot_balance_sheet("KAVA", -fee)
       elif action in ["harvest_deposit", "hard_deposit", "/kava.hard.v1beta1.MsgDeposit"]:
         transfer_event = get_event(raw_log["events"], "transfer")
         amount = get_attribute(transfer_event["attributes"], "amount")["value"]
         amount, currency = split_amount(amount)
         results.append({'Timestamp': timestamp, 'Action': 'LEND', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'hard deposit https://www.mintscan.io/kava/txs/{txhash}'})
+        balance_sheet.put_lend_balance_sheet(currency, amount)
+        balance_sheet.put_spot_balance_sheet("KAVA", -fee)
       elif action in ["harvest_withdraw", "hard_withdraw", "/kava.hard.v1beta1.MsgWithdraw"]:
         transfer_event = get_event(raw_log["events"], "transfer")
         amount = get_attribute(transfer_event["attributes"], "amount")["value"]
         amount, currency = split_amount(amount)
-        results.append({'Timestamp': timestamp, 'Action': 'RECOVER', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'hard withdraw https://www.mintscan.io/kava/txs/{txhash}'})
+        lend_result = balance_sheet.put_lend_balance_sheet(currency, -amount)
+        results.append({'Timestamp': timestamp, 'Action': 'RECOVER', 'Source': 'kava', 'Base': currency, 'Volume': lend_result[0], 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'hard withdraw https://www.mintscan.io/kava/txs/{txhash}'})
+        if lend_result[1] != Decimal("0.0"):
+          results.append({'Timestamp': timestamp, 'Action': 'BONUS', 'Source': 'kava', 'Base': currency, 'Volume': lend_result[1], 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'lend interest https://www.mintscan.io/kava/txs/{txhash}'})
+        balance_sheet.put_spot_balance_sheet("KAVA", -fee)
       elif action in ["claim_harvest_reward", "claim_reward", "withdraw_delegator_reward", "claim_hard_reward", "claim_usdx_minting_reward", "claim_delegator_reward", "/kava.incentive.v1beta1.MsgClaimHardReward", "/kava.incentive.v1beta1.MsgClaimDelegatorReward", "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward"]:
         transfer_event = get_event(raw_log["events"], "transfer")
         amounts_attribute = list(filter(lambda x: x["key"] == "amount", transfer_event["attributes"]))
@@ -172,9 +244,12 @@ def create_cryptact_csv(address):
           for amount in amounts:
             amount, currency = split_amount(amount)
             results.append({'Timestamp': timestamp, 'Action': 'BONUS', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'hard reward https://www.mintscan.io/kava/txs/{txhash}'})
-      elif action in ["createAtomicSwap", "claimAtomicSwap", "/kava.bep3.v1beta1.MsgCreateAtomicSwap", "/kava.bep3.v1beta1.MsgClaimAtomicSwap", "vote"]:
+            balance_sheet.put_spot_balance_sheet(currency, amount)
+            balance_sheet.put_spot_balance_sheet("KAVA", -fee)
+      elif action in ["vote"]:
         if fee != Decimal("0.0"):
           results.append({'Timestamp': timestamp, 'Action': 'SENDFEE', 'Source': 'kava', 'Base': 'KAVA', 'Volume': fee, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'create atomic swap https://www.mintscan.io/kava/txs/{txhash}'})
+          balance_sheet.put_spot_balance_sheet("KAVA", -fee)
       elif action == "refundAtomicSwap":
         pass
       elif action in ["delegate", "/cosmos.staking.v1beta1.MsgDelegate"]:
@@ -185,13 +260,16 @@ def create_cryptact_csv(address):
         else:
           amount = Decimal(amount) / Decimal("1000000")
         results.append({'Timestamp': timestamp, 'Action': 'LEND', 'Source': 'kava', 'Base': 'KAVA', 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'delegate https://www.mintscan.io/kava/txs/{txhash}'})
+        balance_sheet.put_lend_balance_sheet("KAVA", amount)
+        balance_sheet.put_spot_balance_sheet("KAVA", -fee)
         transfer_event = list(filter(lambda x: x["type"] == "transfer", raw_log["events"]))
         if len(transfer_event) == 1:
           amount_attribute = list(filter(lambda x: x["key"] == "amount", transfer_event[0]["attributes"]))[0]["value"]
           amounts = amount_attribute.split(",")
           for amount in amounts:
             amount, currency = split_amount(amount)
-            results.append({'Timestamp': timestamp, 'Action': 'BONUS', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'hard reward https://www.mintscan.io/kava/txs/{txhash}'})
+            results.append({'Timestamp': timestamp, 'Action': 'BONUS', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'hard reward https://www.mintscan.io/kava/txs/{txhash}'})
+            balance_sheet.put_spot_balance_sheet(currency, amount)
         elif len(transfer_event) != 0:
           raise ValueError("too many transfer events")
       elif action in ["swap_exact_for_tokens", "/kava.swap.v1beta1.MsgSwapExactForTokens"]:
@@ -209,10 +287,15 @@ def create_cryptact_csv(address):
           price = output_amount / input_amount
           results.append({'Timestamp': timestamp, 'Action': "SELL", 'Source': 'kava', 'Base': input_currency, 'Volume': input_amount, 'Price': price, 'Counter': output_currency, 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'swap https://www.mintscan.io/kava/txs/{txhash}'})
 
+        balance_sheet.put_spot_balance_sheet(input_currency, input_amount)
+        balance_sheet.put_spot_balance_sheet(output_currency, output_amount)
+        balance_sheet.put_spot_balance_sheet("KAVA", -fee)
+
         fee_amount = get_attribute(swap_event["attributes"], "fee")["value"]
         amount, currency = split_amount(fee_amount)
         if amount != Decimal("0.0"):
           results.append({'Timestamp': timestamp, 'Action': 'SENDFEE', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'swap fee https://www.mintscan.io/kava/txs/{txhash}'})
+          balance_sheet.put_spot_balance_sheet(currency, - amount)
       elif action in ["begin_unbonding", "/cosmos.staking.v1beta1.MsgUndelegate"]:
         transfer_event = get_event(raw_log["events"], "transfer")
         if len(transfer_event["attributes"]) != 6:
@@ -220,10 +303,14 @@ def create_cryptact_csv(address):
         reward_amount = transfer_event["attributes"][2]["value"]
         reward_amount, reward_currency = split_amount(reward_amount)
         results.append({'Timestamp': timestamp, 'Action': 'BONUS', 'Source': 'kava', 'Base': reward_currency, 'Volume': reward_amount, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'delegate reward https://www.mintscan.io/kava/txs/{txhash}'})
-
+        balance_sheet.put_spot_balance_sheet(reward_currency, reward_amount)
         unbond_amount = transfer_event["attributes"][5]["value"]
         unbond_amount, unbond_currency = split_amount(unbond_amount)
-        results.append({'Timestamp': timestamp, 'Action': 'RECOVER', 'Source': 'kava', 'Base': 'KAVA', 'Volume': unbond_amount, 'Price': None, 'Counter': unbond_amount, 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'undelegate https://www.mintscan.io/kava/txs/{txhash}'})
+        lend_result = balance_sheet.put_lend_balance_sheet("KAVA", -unbond_amount)
+        results.append({'Timestamp': timestamp, 'Action': 'RECOVER', 'Source': 'kava', 'Base': 'KAVA', 'Volume': lend_result[0], 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'undelegate https://www.mintscan.io/kava/txs/{txhash}'})
+        if lend_result[1] != Decimal("0.0"):
+          results.append({'Timestamp': timestamp, 'Action': 'BONUS', 'Source': 'kava', 'Base': "KAVA", 'Volume': lend_result[1], 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'lend interest https://www.mintscan.io/kava/txs/{txhash}'})
+        balance_sheet.put_spot_balance_sheet("KAVA", -fee)
       elif action == "/cosmos.staking.v1beta1.MsgBeginRedelegate":
         transfer_event = list(filter(lambda x: x["type"] == "transfer", raw_log["events"]))
         if len(transfer_event) == 1:
@@ -232,6 +319,7 @@ def create_cryptact_csv(address):
           for amount in amounts:
             amount, currency = split_amount(amount)
             results.append({'Timestamp': timestamp, 'Action': 'BONUS', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': None, 'Counter': 'JPY', 'Fee': fee, 'FeeCcy': 'KAVA', 'Comment': f'hard reward https://www.mintscan.io/kava/txs/{txhash}'})
+            balance_sheet.put_spot_balance_sheet(currency, amount)
         elif len(transfer_event) != 0:
           raise ValueError("too many transfer events")
       else:
