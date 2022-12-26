@@ -18,17 +18,18 @@ class BalanceSeet:
 
     def put_spot_balance_sheet(self, currency: str, amount: Decimal):
       self.balance_sheet.setdefault(currency, {"spot": Decimal("0.0"), "lend": Decimal("0.0"), "borrow": Decimal("0.0")})
-      if self.balance_sheet[currency]["spot"] + amount < 0:
-        logger.error(f'amount become less than 0. amount: {amount} currency {currency}')
+      logger.error(f"{currency} {amount}")
+      if self.balance_sheet[currency]["spot"] + amount < Decimal("0"):
+        logger.error(f'amount become less than 0. current spot amount {self.balance_sheet[currency]["spot"]}. input amount: {amount} currency {currency}')
       self.balance_sheet[currency]["spot"] += amount
 
     def put_lend_balance_sheet(self, currency: str, amount: Decimal) -> tuple: # (回収額, 利息)のタプルを返す
       self.balance_sheet.setdefault(currency, {"spot": Decimal("0.0"), "lend": Decimal("0.0"), "borrow": Decimal("0.0")})
       result = (abs(amount), 0)
-      if self.balance_sheet[currency]["lend"] + amount < 0:
+      if self.balance_sheet[currency]["lend"] + amount < Decimal("0"):
         interest = abs(self.balance_sheet[currency]["lend"] + amount)
         result = (self.balance_sheet[currency]["lend"], interest)
-        self.balance_sheet[currency]["lend"] = 0
+        self.balance_sheet[currency]["lend"] = Decimal("0")
         self.balance_sheet[currency]["spot"] += interest
       else:
         self.balance_sheet[currency]["lend"] += amount
@@ -37,10 +38,10 @@ class BalanceSeet:
     def put_borrow_balance_sheet(self, currency: str, amount: Decimal) -> tuple: # (返済額, 利息)のタプルを返す
       self.balance_sheet.setdefault(currency, {"spot": Decimal("0.0"), "lend": Decimal("0.0"), "borrow": Decimal("0.0")})
       result = (abs(amount), 0)
-      if self.balance_sheet[currency]["borrow"] + amount < 0:
+      if self.balance_sheet[currency]["borrow"] + amount < Decimal("0"):
         interest = abs(self.balance_sheet[currency]["borrow"] + amount)
         result = (self.balance_sheet[currency]["borrow"], interest)
-        self.balance_sheet[currency]["borrow"] = 0
+        self.balance_sheet[currency]["borrow"] = Decimal("0")
         self.balance_sheet[currency]["spot"] -= interest
       else:
         self.balance_sheet[currency]["borrow"] += amount
