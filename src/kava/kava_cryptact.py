@@ -146,7 +146,7 @@ def create_cryptact_csv(address):
         elif receiver_address == address: # 入金の場合
           results.append({'Timestamp': timestamp, 'Action': 'CONFIRM', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': 0, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'receive https://www.mintscan.io/kava/txs/{txhash}'})
           balance_sheet.put_spot_balance_sheet(currency, amount)
-      elif action in ["createAtomicSwap", "/kava.bep3.v1beta1.MsgCreateAtomicSwap"]:
+      elif action in ["createAtomicSwap", "/kava.bep3.v1beta1.MsgCreateAtomicSwap"]: # BEP3 Atomic Swap
         if has_event(raw_log["events"], "create_atomic_swap"):
           create_atomic_event = get_event(raw_log["events"], "create_atomic_swap")
           receiver_address = get_attribute(create_atomic_event["attributes"], "recipient")["value"]
@@ -168,29 +168,35 @@ def create_cryptact_csv(address):
         elif receiver_address == address:
           results.append({'Timestamp': timestamp, 'Action': 'CONFIRM', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': 0, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'receive https://www.mintscan.io/kava/txs/{txhash}'})
           balance_sheet.put_spot_balance_sheet(currency, amount)
-      elif action in ["refundAtomicSwap", "claimAtomicSwap", "/kava.bep3.v1beta1.MsgClaimAtomicSwap"]:
+      elif action in ["refundAtomicSwap", "claimAtomicSwap", "/kava.bep3.v1beta1.MsgClaimAtomicSwap"]: # BEP3 Refund
         if has_event(raw_log["events"], "refund_atomic_swap"):
           refund_atomic_event = get_event(raw_log["events"], "refund_atomic_swap")
+          atomic_swap_id = get_attribute(refund_atomic_event["attributes"], "atomic_swap_id")["value"]
+          atomic_swap = temporary_deposit.get(atomic_swap_id)
+          sender_address = get_attribute(atomic_swap["attributes"], "sender")["value"]
+          receiver_address = get_attribute(atomic_swap["attributes"], "recipient")["value"]
+          amount = get_attribute(atomic_swap["attributes"], "amount")["value"]
+          amount, currency = split_amount(amount)
+          if sender_address == address:
+            set_fee(fee, results, timestamp, txhash)
+            results.append({'Timestamp': timestamp, 'Action': 'CONFIRM', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': 0, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'send https://www.mintscan.io/kava/txs/{txhash}'})
+            balance_sheet.put_spot_balance_sheet(currency, amount)
+          elif receiver_address == address:
+            results.append({'Timestamp': timestamp, 'Action': 'CONFIRM', 'Source': 'kava', 'Base': currency, 'Volume': - amount, 'Price': 0, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'receive https://www.mintscan.io/kava/txs/{txhash}'})
+            balance_sheet.put_spot_balance_sheet(currency, - amount)
+          else:
+            raise ValueError("invalid refund atomic swap type")
         elif has_event(raw_log["events"], "claim_atomic_swap"):
-          #refund_atomic_event = get_event(raw_log["events"], "claim_atomic_swap")
-          continue
-        else:
-          raise ValueError("invalid refund atomic swap type")
-        atomic_swap_id = get_attribute(refund_atomic_event["attributes"], "atomic_swap_id")["value"]
-        atomic_swap = temporary_deposit.get(atomic_swap_id)
-
-
-        sender_address = get_attribute(atomic_swap["attributes"], "sender")["value"]
-        receiver_address = get_attribute(atomic_swap["attributes"], "recipient")["value"]
-        amount = get_attribute(atomic_swap["attributes"], "amount")["value"]
-        amount, currency = split_amount(amount)
-        if sender_address == address:
-          set_fee(fee, results, timestamp, txhash)
-          results.append({'Timestamp': timestamp, 'Action': 'CONFIRM', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': 0, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'send https://www.mintscan.io/kava/txs/{txhash}'})
-          balance_sheet.put_spot_balance_sheet(currency, amount)
-        elif receiver_address == address:
-          results.append({'Timestamp': timestamp, 'Action': 'CONFIRM', 'Source': 'kava', 'Base': currency, 'Volume': - amount, 'Price': 0, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'receive https://www.mintscan.io/kava/txs/{txhash}'})
-          balance_sheet.put_spot_balance_sheet(currency, - amount)
+          claim_atomic_swap = get_event(raw_log["events"], "claim_atomic_swap")
+          atomic_swap_id = get_attribute(claim_atomic_swap["attributes"], "atomic_swap_id")["value"]
+          if temporary_deposit.has(atomic_swap_id):
+            continue
+          else:
+            transfer = get_event(raw_log["events"], "transfer")
+            amount = get_attribute(transfer["attributes"], "amount")["value"]
+            amount, currency = split_amount(amount)
+            results.append({'Timestamp': timestamp, 'Action': 'CONFIRM', 'Source': 'kava', 'Base': currency, 'Volume': amount, 'Price': 0, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'send https://www.mintscan.io/kava/txs/{txhash}'})
+            balance_sheet.put_spot_balance_sheet(currency, amount)
         else:
           raise ValueError("invalid refund atomic swap type")
       elif action in ["create_cdp", "/kava.cdp.v1beta1.MsgCreateCDP"]:
