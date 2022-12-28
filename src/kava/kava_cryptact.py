@@ -3,6 +3,7 @@ import json
 from decimal import Decimal
 import pandas as pd
 from datetime import datetime as dt
+import  pytz
 import datetime
 import re
 import os
@@ -11,6 +12,10 @@ import re
 from typing import Tuple, Union
 from financial_tools.balance_sheet import BalanceSeet
 from financial_tools.temporary_deposit import TemporaryDeposit
+try:
+  from financial_tools.extratx_dict import extratx_dict
+except:
+  raise Exception("execute\n $cp extratx_dict.py_templrate extratx_dict.py")
 
 logger = logging.getLogger(name=__name__)
 logger.addHandler(logging.NullHandler())
@@ -97,6 +102,31 @@ def get_attribute(attributes: dict, key: str):
     raise ValueError(f"invalid: {key} in a attributes")
   return attribute[0]
 
+
+def insert_extra_tx(results: list, timestamp: dt):
+  for extratx in extratx_dict:
+    if dt.strptime(extratx["Timestamp"], '%Y-%m-%d %H:%M:%S').astimezone(pytz.timezone('Asia/Tokyo')) < timestamp:
+      results.append(extratx)
+      extratx_dict.remove(extratx)
+      action = extratx["Action"]
+      volume = Decimal(extratx["Volume"])
+      price = Decimal(extratx["Price"])
+      counter = extratx["Counter"]
+      base = extratx["Base"]
+      if action in ["CONFIRM", "BONUS"]:
+        balance_sheet.put_spot_balance_sheet(base, volume)
+      elif action == "RECOVER":
+        lend_result = balance_sheet.put_lend_balance_sheet(base, - volume)
+        if lend_result[1] != Decimal("0.0"):
+          results.append({'Timestamp': timestamp, 'Action': 'BONUS', 'Source': 'kava', 'Base': base, 'Volume': lend_result[1], 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'lend interest from extratx'})
+      elif action == "SELL":
+        balance_sheet.put_spot_balance_sheet(base, - volume)
+        balance_sheet.put_spot_balance_sheet(counter, volume * price)
+      elif action == "RETURN":
+        borrow_result = balance_sheet.put_borrow_balance_sheet(base, - volume)
+        if borrow_result[1] != Decimal("0.0"):
+          results.append({'Timestamp': timestamp, 'Action': 'PAY', 'Source': 'kava', 'Base': base, 'Volume': borrow_result[1], 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'borrow interest from extratx'})
+
 def create_cryptact_csv(address):
   results = []
   transactions = []
@@ -124,11 +154,12 @@ def create_cryptact_csv(address):
     #logger.debug(json.dumps(transaction, indent=2))
     chain_id = transaction['header']['chain_id']
     timestamp = dt.strptime(transaction['header']['timestamp'], '%Y-%m-%dT%H:%M:%SZ')
-    timestamp = timestamp.astimezone(datetime.timezone(datetime.timedelta(hours=+9)))
-    timestamp = datetime.datetime.strftime(timestamp, '%Y-%m-%d %H:%M:%S')
+    timestamp_datetime = timestamp.astimezone(datetime.timezone(datetime.timedelta(hours=+9)))
+    timestamp = datetime.datetime.strftime(timestamp_datetime, '%Y-%m-%d %H:%M:%S')
     txhash = transaction['data']['txhash']
     fee = get_fee(transaction)
     raw_logs = json.loads(transaction['data']['raw_log'])
+    insert_extra_tx(results, timestamp_datetime)
     for raw_log in raw_logs:
       message_event = get_event(raw_log["events"], "message")
       action = get_attribute(message_event["attributes"], "action")["value"]
