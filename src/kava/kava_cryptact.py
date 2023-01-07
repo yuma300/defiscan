@@ -9,7 +9,7 @@ import re
 import os
 import logging
 import re
-from typing import Tuple, Union
+from typing import Tuple
 from financial_tools.balance_sheet import BalanceSeet
 from financial_tools.temporary_deposit import TemporaryDeposit
 try:
@@ -384,20 +384,6 @@ def create_cryptact_csv(address):
         if lend_result[1] != Decimal("0.0"):
           results.append({'Timestamp': timestamp, 'Action': 'BONUS', 'Source': 'kava', 'Base': "KAVA", 'Volume': lend_result[1], 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'lend interest https://www.mintscan.io/kava/txs/{txhash}'})
         balance_sheet.put_spot_balance_sheet("KAVA", -fee)
-
-#        if len(transfer_event["attributes"]) != 6:
-#          raise ValueError(f"invalid number of transfer attributes {transfer_event['attributes']}")
-#        reward_amount = transfer_event["attributes"][2]["value"]
-#        reward_amount, reward_currency = split_amount(reward_amount)
-#        results.append({'Timestamp': timestamp, 'Action': 'BONUS', 'Source': 'kava', 'Base': reward_currency, 'Volume': reward_amount, 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'delegate reward https://www.mintscan.io/kava/txs/{txhash}'})
-#        balance_sheet.put_spot_balance_sheet(reward_currency, reward_amount)
-#        unbond_amount = transfer_event["attributes"][5]["value"]
-#        unbond_amount, unbond_currency = split_amount(unbond_amount)
-#        lend_result = balance_sheet.put_lend_balance_sheet("KAVA", -unbond_amount)
-#        results.append({'Timestamp': timestamp, 'Action': 'RECOVER', 'Source': 'kava', 'Base': 'KAVA', 'Volume': lend_result[0], 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'undelegate https://www.mintscan.io/kava/txs/{txhash}'})
-#        if lend_result[1] != Decimal("0.0"):
-#          results.append({'Timestamp': timestamp, 'Action': 'BONUS', 'Source': 'kava', 'Base': "KAVA", 'Volume': lend_result[1], 'Price': None, 'Counter': 'JPY', 'Fee': 0, 'FeeCcy': 'KAVA', 'Comment': f'lend interest https://www.mintscan.io/kava/txs/{txhash}'})
-#        balance_sheet.put_spot_balance_sheet("KAVA", -fee)
       elif action == "/cosmos.staking.v1beta1.MsgBeginRedelegate":
         transfer_event = list(filter(lambda x: x["type"] == "transfer", raw_log["events"]))
         if len(transfer_event) == 1:
